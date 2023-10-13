@@ -6,19 +6,9 @@
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    <title>Document</title>
-</head>
+<?php include_once('./componentes/head.php') ?>
 <body>
-    <header>
-        <nav>
-            
-        </nav>
-    </header>
+    <?php include_once('./componentes/user-header.php') ?>
     <main class="main">
         <table class="table table-striped" >
             <thead>

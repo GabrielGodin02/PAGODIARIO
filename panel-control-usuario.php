@@ -1,29 +1,11 @@
+<?php include_once('./php/auth.php')?>
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    <script src="monto.js"></script>
-    <script src="java.js"></script>
-    <title>Document</title>
-</head>
+<?php include_once('./componentes/head.php') ?>
 <body>
     <?php echo '<script>const usuarioYaSolicitoPrestamo = $cantida_prestamo.lenght > 0  </script>' ?>
-    <header>
-        <nav>
-            <div class="container">
-                <div class="logo" onclick="toggleList()"><img src="img/usuario.png"></div>
-                <ul class="lista">
-                    <li><a href="">Perfil</a></li>
-                    <li><a href="login.php"> Log Out</a></li>
-                    <li><a href="solicitudes.php">Solicitud</a></li>
-                </ul>
-            </div>
-        </nav>
-    </header>
+    <?php include_once('./componentes/user-header.php') ?>
     <main>
         
         <form action='php/ingresar-prestamo.php' method='POST'>
