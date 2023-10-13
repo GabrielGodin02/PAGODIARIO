@@ -1,19 +1,16 @@
+<?php include_once('./php/auth.php') ?>
+
 <?php
     include 'php/conexion.php';
     $sql = "SELECT id_usuario, nombre, email, direccion, telefono,dia_solicitado, hora, cantida_prestamo  FROM registro, prestamo WHERE id_usuario=ident";
     $query = mysqli_query($conexion,$sql);
     $row = mysqli_fetch_array($query);
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    <script src="java.js"></script>
-    <title>Document</title>
-</head>
+<?php include_once('./componentes/head.php') ?>
 <body>
     <header>
         <nav>
@@ -32,7 +29,7 @@
         <table class="table table-striped" >
             <thead>
                 <tr>
-                    <th scope="col">Identificacion</th>
+                    <th scope="col">Identificación</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Email</th>
                     <th scope="col">direccion</th>

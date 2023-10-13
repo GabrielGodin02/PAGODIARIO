@@ -8,7 +8,7 @@
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="estilo-login.css">
-    <title>Document</title>
+       <title>PAGODIARIO</title>
 </head>
 <body>
     <div class="form-gap"></div>
