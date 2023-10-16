@@ -19,7 +19,7 @@
                 <ul class="lista">
                     <li><a href="">Aceptadas</a></li>
                     <li><a href="solicitudes_usuario.php">Rechazadas</a></li>
-                    <li><a href="login.php"> Log Out</a></li>
+                    <li><a href="./php/logout.php"> Log Out</a></li>
                 </ul>
             </div>
         </nav>

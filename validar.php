@@ -2,7 +2,6 @@
 $email =$_POST['email'];
 $ident =$_POST['ident'];
 session_start();
-$_SESSION['ident'] = $ident;
 
 $conexion = mysqli_connect("localhost", "root", "", "visual");
 
@@ -14,6 +13,7 @@ $fila = mysqli_num_rows($resultado);
 if ($fila) {
     // Autenticación exitosa, guarda la identificación en una variable de sesión
     $_SESSION['ident'] = $ident;
+    $_SESSION['auth'] = true;
     header("location: panel-control-usuario.php");
 } else {
     echo (
