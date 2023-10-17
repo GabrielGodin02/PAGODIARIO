@@ -12,8 +12,9 @@ $fila = mysqli_num_rows($resultado);
 
 if ($fila) {
     // Autenticación exitosa, guarda la identificación en una variable de sesión
-    $_SESSION['ident'] = $ident;
+    $_SESSION['user'] =  mysqli_fetch_array($resultado);
     $_SESSION['auth'] = true;
+    $_SESSION['admin'] = mysqli_fetch_array($resultado)['admin'];
     header("location: panel-control-usuario.php");
 } else {
     echo (
