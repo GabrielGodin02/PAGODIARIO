@@ -1,9 +1,9 @@
 <?php
  include 'conexion.php';
- $usuario_id =$_POST['usuario_id'];
+ $id_prestamo =$_POST['id_prestamo'];
  $monto_abono =$_POST['monto'];
 
- $sql = "SELECT cantida_prestamo FROM prestamo WHERE id_usuario = $usuario_id";
+ $sql = "SELECT cantida_prestamo FROM prestamo WHERE id_prestamo = $id_prestamo";
  $query = mysqli_query($conexion, $sql);
  $row = mysqli_fetch_array($query);
  if ($row) {
@@ -13,7 +13,7 @@
     $cantidad_prestamo_actual -= $monto_abono;
 
     // Actualizar la cantidad_prestamo en la base de datos
-    $update_sql = "UPDATE prestamo SET cantida_prestamo = $cantidad_prestamo_actual WHERE id_usuario = $usuario_id";
+    $update_sql = "UPDATE prestamo SET cantida_prestamo = $cantidad_prestamo_actual WHERE id_prestamo = $id_prestamo";
     $update_query = mysqli_query($conexion, $update_sql);
 
     if ($row) {
@@ -23,13 +23,13 @@
         $cantidad_prestamo_actual -= $monto_abono;
 
         // Actualizar la cantidad_prestamo en la base de datos
-        $update_sql = "UPDATE prestamo SET cantida_prestamo = $cantidad_prestamo_actual WHERE id_usuario = $usuario_id";
+        $update_sql = "UPDATE prestamo SET cantida_prestamo = $cantidad_prestamo_actual WHERE id_prestamo = $id_prestamo";
         $update_query = mysqli_query($conexion, $update_sql);
 
         if ($update_query) {
             // Verificar si la cantidad_prestamo llegó a cero y eliminar el registro si es así
             if ($cantidad_prestamo_actual <= 0) {
-                $delete_sql = "DELETE FROM prestamo WHERE id_usuario = $usuario_id";
+                $delete_sql = "DELETE FROM prestamo WHERE id_prestamo = $id_prestamo";
                 $delete_query = mysqli_query($conexion, $delete_sql);
                 if ($delete_query) {
                     echo '

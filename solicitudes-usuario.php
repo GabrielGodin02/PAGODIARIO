@@ -1,3 +1,6 @@
+<?php 
+include ('php/auth.php');
+?>
 <?php
     include 'php/conexion.php';
     $sql = "SELECT id_usuario, email, direccion, telefono,dia_solicitado, hora, cantida_prestamo  FROM registro, prestamo WHERE id_usuario=ident";
@@ -33,8 +36,8 @@
                 <td><?php echo $row ['telefono']?></td>
                 <td><?php echo $row ['dia_solicitado']?></td>
                 <td><?php echo $row ['hora']?></td>
-                <td><?php echo $row ['cantida_prestamo']?></td>
-                <td><?php echo $row ['cantida_prestamo']?></td>
+                <td>$<?php echo $row ['cantida_prestamo']?></td>
+
             </tr>
            
         <?php

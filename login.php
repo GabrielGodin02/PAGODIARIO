@@ -24,7 +24,7 @@
                     <button type="submit" title="Ingresar" name="Ingresar" required >Login</button>
                 </form>
                 <div class="pie-form">
-                    <a href="recuperar-contarseña.html">¿Perdiste tu contraseña?</a>
+                    <a href="recuperar-contraseña.php">¿Perdiste tu contraseña?</a>
                     <a href="formulario.php">¿No tienes Cuenta? Registrate</a>
                 </div>
             </div>

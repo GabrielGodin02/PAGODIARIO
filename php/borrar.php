@@ -3,7 +3,7 @@ include 'conexion.php';
 
 $id=$_GET['id'];
 
-$query = "DELETE FROM prestamo WHERE id_usuario='$id' ";
+$query = "DELETE FROM prestamo WHERE id_prestamo='$id' ";
 
 $ejecutar=mysqli_query($conexion, $query);
 if($ejecutar){

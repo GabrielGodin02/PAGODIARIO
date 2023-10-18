@@ -15,7 +15,7 @@ $ejecutar=mysqli_query($conexion, $query);
 if($ejecutar){
     echo'
     <script>
-    alert("Datos Guardados");
+    alert("Solicitud de prestamo envianda");
     window.location="../panel-control-usuario.php";
     </script>
     ';
