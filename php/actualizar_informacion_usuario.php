@@ -1,12 +1,12 @@
 <?php
     include 'conexion.php';
-    $nombre =$_GET['nombre'];
-    $apellidos =$_GET['apellidos'];
-    $email =$_GET['email'];
+    $nombre =$_POST['nombre'];
+    $apellidos =$_POST['apellidos'];
+    $email =$_POST['email'];
     $fecha =$_POST['fecha'];
 
 
-    $update_sql = "UPDATE registro SET nombre=?, apellidos=?, email=?, fecha=? WHERE ident=?";
+    $update_sql = "UPDATE registro SET nombre='$nombre', apellidos='$apellidos', email='$email', fecha='$fecha' WHERE nombre='$nombre'";
     $update_query = mysqli_query($conexion, $update_sql);
 
     if ($update_query) {
