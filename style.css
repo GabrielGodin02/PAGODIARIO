@@ -85,7 +85,10 @@ label {
   margin-top: 40px;
   margin-left: 23px;
 }
-
+.ordenar-inf{
+  display: flex;
+  
+}
 .formulario {
   margin-top: 60px;
 }
