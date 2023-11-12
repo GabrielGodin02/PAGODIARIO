@@ -2,7 +2,8 @@
 
 <?php
 include 'php/conexion.php';
-$sql = "SELECT id_usuario, nombre, email, direccion, telefono, id_prestamo,dia_solicitado, hora, cantida_prestamo  FROM registro, prestamo WHERE id_usuario=ident";
+
+$sql = "SELECT id_usuario, nombre, registro.direccion as direccion, email, telefono, id_prestamo,dia_solicitado, hora, cantida_prestamo, prestamo.estado as estado FROM registro, prestamo WHERE id_usuario=ident";
 $query = mysqli_query($conexion, $sql);
 $row = mysqli_fetch_array($query);
 //class=<?php echo '"'.strtolower($row["estado"]).'"'; 
@@ -18,6 +19,17 @@ $row = mysqli_fetch_array($query);
     <main class="main">
         <table class="table table-striped">
             <thead>
+                <tr>
+                    <td colspan="11" class="search-cell">
+                        <form action="" onsubmit="filter(event)">
+                            <span>Consultar por numero de documento</span>
+                            <input type="text" name="search" onchange="filter()">
+                            <button type="submit">
+                                <img src="./img/lupa.png" alt="" srcset="">
+                            </button>
+                        </form>
+                    </td>
+                </tr>
                 <tr>
                     <th scope="col">Identificación</th>
                     <th scope="col">Nombre</th>
@@ -37,8 +49,8 @@ $row = mysqli_fetch_array($query);
                 if ($row != null) {
                     do {
                 ?>
-                        <tr>
-                            <td><?php echo $row['id_usuario'] ?></td>
+                        <tr class="usuario">
+                            <td><input class="ident" type="text" class="hidden" disabled readonly value="<?php echo $row['id_usuario'] ?>"></td>
                             <td><?php echo $row['nombre'] ?></td>
                             <td><?php echo $row['email'] ?></td>
                             <td><?php echo $row['direccion'] ?></td>
@@ -52,10 +64,16 @@ $row = mysqli_fetch_array($query);
                                 <form action='php/guardar_seleccion.php' method='POST' class="sele">
                                     <input type="hidden" name="id_prestamo" value="<?php echo $row['id_prestamo']; ?>">
                                     <select name="estado" id="opcion_<?php echo $row['id_prestamo']; ?>" onchange="this.form.submit()">
-                                        <option value="">----</option>
-                                        <option value="pendiente" required>Pendiente</option>
-                                        <option value="Aceptada" required>Aceptada</option>
-                                        <option value="Rechazada" required>Rechazada</option>
+                                        <?php
+                                        $estados = [
+                                            'Pendiente' => 'Pendiente',
+                                            'Aceptada' => 'Aceptada',
+                                            'Rechazada' => 'Rechazada',
+                                        ];
+                                        foreach ($estados as $estado => $estadoMayus) {
+                                            echo ('<option ' . ($estado ==  $row["estado"] ? " selected " : " ") . 'value="' . $estado . '">' . $estadoMayus . '</option>');
+                                        }
+                                        ?>
                                     </select>
                                 </form>
                             </td>
@@ -136,6 +154,15 @@ $row = mysqli_fetch_array($query);
             var cerrarModalAbonoButton = document.getElementById("cerrarModalAbono");
             if (cerrarModalAbonoButton) {
                 cerrarModalAbonoButton.addEventListener("click", cerrarModalAbono);
+            }
+
+            function filter(ev) {
+                ev.preventDefault();
+                document.querySelectorAll(".usuario").forEach(usuario => {
+                    usuario.querySelector(".ident").value.includes(ev.target[0].value) ?
+                        usuario.classList.remove("hidden") :
+                        usuario.classList.add("hidden");
+                });
             }
         </script>
 

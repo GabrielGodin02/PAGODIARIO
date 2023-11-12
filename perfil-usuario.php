@@ -9,7 +9,7 @@
     <main>
         <h3 class="vista-titulo">Perfil de usuario</h3>
         <div class="container">
-            <form action='php/actualizar_informacion_usuario.php' method='POST'>
+            <form action='./php/actualizar_informacion_usuario.php' method='POST'>
                 <div class="ordenar-inf">
                     <div>
                         <label for="nombre">Nombre</label>
@@ -31,6 +31,10 @@
                     </div>
                 </div>
                 <div class="ordenar-inf">
+                <div>
+                        <label for="fecha">Direccion</label>
+                        <input type="text" class="form-control" disabled value="<?php echo $_SESSION['user']['direccion'] ?>" name="direccion">
+                    </div>
                     <div>
                         <label for="estado">Estado civil</label>
                         <select class="form-control" name="estado" disabled>
