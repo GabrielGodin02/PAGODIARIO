@@ -101,6 +101,9 @@ label {
   margin-left: 35px;
   width: 130px;
 }
+.hidden {
+  visibility: hidden;
+}
 
 .text {
   text-align: center;

@@ -81,9 +81,9 @@ INSERT INTO `registro` (`nombre`, `apellidos`, `ident`, `email`, `estado`, `fech
 ('oscar', 'beto', 44, 'omarpimienta0208@gmail.com', 'casad@', '2023-09-12', 0),
 ('carlos', 'martines', 45, 'gf@gmail.com', 'union libre', '2023-09-07', 0),
 ('natalia', 'dd', 66, 'gabriel.godin@misena.edu.co', 'casad@', '2023-08-29', 0),
-('gabriel', 'godin', 111, 'gabrielgodin02@gmail.com', 'solater@', '2023-09-03', 1),
-('pedro', 'godin', 333, 'pitchmarkel7@hotmail.com', 'solater@', '2023-09-12', 0),
-('Alex', 'Valdelamar Bustamante', 1118805275, 'avaldelamar57@misena.edu.co', 'solater@', '2004-08-04', 1),
+('gabriel', 'godin', 111, 'gabrielgodin02@gmail.com', 'solter@', '2023-09-03', 1),
+('pedro', 'godin', 333, 'pitchmarkel7@hotmail.com', 'solter@', '2023-09-12', 0),
+('Alex', 'Valdelamar Bustamante', 1118805275, 'avaldelamar57@misena.edu.co', 'solter@', '2004-08-04', 1),
 ('Johanna', 'Bustamante', 1118808995, 'Jovis@gmail.com', 'union libre', '1985-08-07', 0);
 
 --

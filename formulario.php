@@ -30,7 +30,7 @@
                 <div class="gg">
                     <select class="form-select mb-3" aria-label="Default select example" name="estado" required>
                         <option selected>Estado Civil</option>
-                        <option value="solater@">Solter@</option>
+                        <option value="solter@">Solter@</option>
                         <option value="casad@">Casad@</option>
                         <option value="union libre">Union Libre</option>
                     </select>

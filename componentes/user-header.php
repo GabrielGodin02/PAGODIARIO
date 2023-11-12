@@ -20,7 +20,7 @@
             <div class="logo" onclick="toggleList()">
                 <img src="img/usuario.png">
             </div>
-            <h4 class='ident'><?php echo $_SESSION['user']['nombre'] . ' ' . $_SESSION['user']['apellidos'] ?></h4>
+            <h4 class='ident'><?php echo $_SESSION['user']['nombre'] . ' ' . $_SESSION['user']['apellidos'] . ($_SESSION['user']['admin'] ? ' | Admin' : ' | User') ?></h4>
             <ul class="lista">
                 <?php foreach ($links as $key => $value) { ?>
                     <li class="<?php echo ($_url == '/visual/' . $value) ? 'selected' : '' ?>"><a href="<?php echo $value ?>"><?php echo $key ?></a></li>
