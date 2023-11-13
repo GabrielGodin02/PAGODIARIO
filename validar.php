@@ -35,7 +35,7 @@ if ($fila) {
         </html>
        '
     );
-    include("login.php");
+    include("index.php");
 }
 
 mysqli_free_result($resultado);

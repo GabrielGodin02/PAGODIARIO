@@ -16,7 +16,7 @@ if($ejecutar){
     echo'
     <script>
     alert("Datos Guardados");
-    window.location="../login.php";
+    window.location="../index.php";
     </script>
     ';
 }else{

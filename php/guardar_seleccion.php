@@ -10,14 +10,14 @@
         echo '
         <script>
         alert("Solicitud Aceptada");
-        window.location="../index.php";
+        window.location="../admin.php";
         </script>
         '; // Envía una respuesta al cliente para indicar que se guardó con éxito
     } else {
         echo '
         <script>
         alert("Solicitud no Aceptada");
-        window.location="../index.php";
+        window.location="../admin.php";
         </script>
         ';
     }
