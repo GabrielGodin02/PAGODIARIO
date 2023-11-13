@@ -1,7 +1,7 @@
 <?php include_once('./php/auth.php') ?>
 
 <?php
-include 'php/conexion.php';
+include './php/conexion.php';
 
 $sql = "SELECT id_usuario, nombre, registro.direccion as direccion, email, telefono, id_prestamo,dia_solicitado, hora, cantida_prestamo, prestamo.estado as estado FROM registro, prestamo WHERE id_usuario=ident";
 $query = mysqli_query($conexion, $sql);
@@ -59,9 +59,9 @@ $row = mysqli_fetch_array($query);
                             <td><?php echo $row['hora'] ?></td>
                             <td>$<?php echo $row['cantida_prestamo'] ?></td>
                             <td><a href="javascript:void(0);" class="botona" onclick="abrirModal('<?php echo $row['id_prestamo']; ?>')">Abonar</a></td>
-                            <td><a href="php/borrar.php?id=<?php echo $row['id_prestamo'] ?>" class="botona">Borrar</a></td>
+                            <td><a href="./php/borrar.php?id=<?php echo $row['id_prestamo'] ?>" class="botona">Borrar</a></td>
                             <td>
-                                <form action='php/guardar_seleccion.php' method='POST' class="sele">
+                                <form action='./php/guardar_seleccion.php' method='POST' class="sele">
                                     <input type="hidden" name="id_prestamo" value="<?php echo $row['id_prestamo']; ?>">
                                     <select name="estado" id="opcion_<?php echo $row['id_prestamo']; ?>" onchange="this.form.submit()">
                                         <?php
@@ -81,7 +81,7 @@ $row = mysqli_fetch_array($query);
                                 function guardarSeleccion(usuarioId, seleccion) {
                                     // Realiza una solicitud AJAX para enviar la selección al servidor
                                     var xhr = new XMLHttpRequest();
-                                    xhr.open('POST', 'php/guardar_seleccion.php', true);
+                                    xhr.open('POST', './php/guardar_seleccion.php', true);
                                     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                                     xhr.onreadystatechange = function() {
                                         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -114,7 +114,7 @@ $row = mysqli_fetch_array($query);
                 <span class="cerrar" id="cerrarModalAbono">&times;</span>
                 <h2>Realizar Abono</h2>
                 <!-- Aquí puedes agregar un formulario para realizar el abono -->
-                <form action="php/realizar_abono.php" method="POST">
+                <form action="./php/realizar_abono.php" method="POST">
                     <div class="abonar">
                         <label for="monto">Monto del abono:</label>
                         <input type="number" id="monto" name="monto" class="form-control" required>

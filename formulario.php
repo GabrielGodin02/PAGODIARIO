@@ -5,7 +5,7 @@
 <body>
     <main>
         <div class="centro">
-            <form action='php/registro.php' method='POST'>
+            <form action='./php/registro.php' method='POST'>
                 <h1>Informacion de Registro</h1>
                 <div class="gg">
                     <div class="form-floating mb-3">

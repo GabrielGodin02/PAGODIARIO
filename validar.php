@@ -1,9 +1,9 @@
 <?php
+include './php/conexion.php';
+
 $email =$_POST['email'];
 $ident =$_POST['ident'];
 session_start();
-
-$conexion = mysqli_connect("localhost", "root", "", "visual");
 
 $consulta = "SELECT * FROM registro WHERE ident='$ident' AND email='$email'";
 

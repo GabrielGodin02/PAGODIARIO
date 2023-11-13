@@ -4,8 +4,6 @@ include('./php/conexion.php');
 
 $ident = $_SESSION["user"]["ident"];
 
-$conexion = mysqli_connect("localhost", "root", "", "visual");
-
 $consulta = "SELECT * FROM prestamo WHERE id_usuario='$ident' AND (estado='pendiente' OR estado='Aceptada')";
 
 $resultado = mysqli_query($conexion, $consulta);
@@ -26,7 +24,7 @@ $tiene_pendientes = $fila > 0;
             <h2 class='vista-titulo'>Ya solicito un prestamo, hagale seguimiento <a href="./solicitudes.php" class="link">Aquí.</a> </h2>
         <?php } else {
         ?>
-            <form action='php/ingresar-prestamo.php' method='POST'>
+            <form action='./php/ingresar-prestamo.php' method='POST'>
                 <h2 class='vista-titulo'>Complete el formulario para solicitar un prestamo</h2>
                 <div class="gg">
                     <div class="form-floating mb-3">

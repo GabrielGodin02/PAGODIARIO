@@ -5,7 +5,7 @@ function toggleList() {
 function guardarSeleccion(usuarioId, estado) {
     // Realiza una solicitud AJAX para enviar la selección al servidor
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "php/guardar_seleccion.php", true);
+    xhr.open("POST", "./php/guardar_seleccion.php", true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {

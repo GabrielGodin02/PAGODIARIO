@@ -23,7 +23,7 @@
                       <p>Puede restablecer su contraseña aquí.</p>
                       <div class="panel-body">
         
-                        <form id="register-form" role="form" autocomplete="off" class="form" action="php/actualizar-contraseña.php" method="post">
+                        <form id="register-form" role="form" autocomplete="off" class="form" action="./php/actualizar-contraseña.php" method="post">
         
                           <div class="form-group">
                             <div class="input-group">

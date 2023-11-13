@@ -1,8 +1,8 @@
 <?php
-include('php/auth.php');
+include('./php/auth.php');
 ?>
 <?php
-include 'php/conexion.php';
+include './php/conexion.php';
 $sql = "SELECT id_usuario, email, prestamo.direccion as direccion, telefono,dia_solicitado, hora, cantida_prestamo, prestamo.estado as p_estado  
 FROM registro, prestamo 
 WHERE id_usuario=ident";

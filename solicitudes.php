@@ -1,7 +1,7 @@
 <?php include('./php/auth.php')?>
 
 <?php
-include 'php/conexion.php';
+include './php/conexion.php';
 $sql = "SELECT  cantida_prestamo,dia_solicitado,prestamo.estado  FROM prestamo WHERE id_usuario=".$_SESSION['user']['ident'];
 $query = mysqli_query($conexion, $sql);
 $row = mysqli_fetch_array($query);
