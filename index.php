@@ -1,35 +1,41 @@
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-       <title>PAGODIARIO</title>
-    <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet"> 
-    <link href="https://fonts.googleapis.com/css?family=Overpass&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="estilo-login.css">
+<?php include_once('./public/componentes/head.php') // cabecera principal?>
+<?php
+// inicio de session
+session_start();
+// verificacion de url
+$_url = $_SERVER["REQUEST_URI"];
+$split_url = explode("/", $_url);
+$current_dir =  end($split_url);
+in_array("admin", $split_url);
+// Router de la app 
+switch ($current_dir) {
+    case '':
+        include_once('app/vistas/login.php');
+        break;
+    case 'registro':
+        include_once('app/vistas/registro.php');
+        break;
+    case 'recuperacion':
+        include_once('app/vistas/recuperar-contraseña.php');
+        break;
+    case 'solicitar':
+        include_once('app/vistas/deudor/panel-control-usuario.php');
+        break;
+    case '':
+        include_once('app/vistas/login.php');
+        break;
+    default:
+        http_response_code(404);
+        include 'app/vistas/404.php';
+        break;
+}
+?>
 
-</head>
-<body>
-    <div id="contenedor">
-        <div id="central">
-            <div id="login">
-                <div class="titulo">
-                    Bienvenido
-                </div>
-                <form id="loginform" action="validar.php" method="POST">
-                    <input type="text" name="email" placeholder="Usuario" required>
-                    
-                    <input type="password" placeholder="Contraseña" name="ident" required>
-                    
-                    <button type="submit" title="Ingresar" name="Ingresar" required >Login</button>
-                </form>
-                <div class="pie-form">
-                    <a href="recuperar-contraseña.php">¿Perdiste tu contraseña?</a>
-                    <a href="formulario.php">¿No tienes Cuenta? Registrate</a>
-                </div>
-            </div>
-        </div>
-    </div>
-   
-</body>
+
+<!-- <footer>
+    <label class="text">Copyright © Todos los derechos reservados</label>
+</footer> -->
 </html>

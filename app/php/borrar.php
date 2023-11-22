@@ -10,14 +10,14 @@ if($ejecutar){
     echo'
     <script>
     alert("Datos Eliminados");
-    window.location="../admin.php";
+    window.location="../vistas/admin/admin.php";
     </script>
     ';
 }else{
     echo'
     <script>
     alert("Datos no Eliminados");
-    window.location="../admin.php";
+    window.location="../vistas/admin/admin.php";
     </script>
     ';
 }

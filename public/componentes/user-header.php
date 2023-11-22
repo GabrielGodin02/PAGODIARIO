@@ -7,13 +7,13 @@
     $links = [
         'Mi perfil' => 'perfil-usuario.php',
         'Solicitar' => 'panel-control-usuario.php',
-        'Mis solicitudes' => 'solicitudes.php',
+        'Mis solicitudes' => 'vistas/solicitudes-deudor.php',
     ];
     $admin_links = [
         'Mi perfil' => 'perfil-usuario.php',
         'Solicitar' => 'panel-control-usuario.php',
         'Solicitudes' => 'solicitudes-usuario.php',
-        'Control solicitudes' => 'admin.php',
+        'Control solicitudes' => 'vistas/admin/admin.php',
     ];
     if ($_SESSION['user']['admin']) $links = $admin_links;
     ?>

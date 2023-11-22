@@ -16,14 +16,14 @@ if($ejecutar){
     echo'
     <script>
     alert("Datos Guardados");
-    window.location="../index.php";
+    window.location="../vistas/login.php";
     </script>
     ';
 }else{
     echo'
     <script>
     alert("Datos no Guardados");
-    window.location="../formulario.php";
+    window.location="../vistas/formulario.php";
     </script>
     ';
 }

@@ -1,7 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<?php include_once('./componentes/head.php') ?>
-
 <body>
     <main>
         <div class="centro">
@@ -46,9 +42,3 @@
 
     </main>
 </body>
-
-<footer>
-    <label class="text">Copyright © Todos los derechos reservados</label>
-</footer>
-
-</html>

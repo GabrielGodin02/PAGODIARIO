@@ -35,7 +35,7 @@ if ($fila) {
         </html>
        '
     );
-    include("index.php");
+    include("vistas/login.php");
 }
 
 mysqli_free_result($resultado);

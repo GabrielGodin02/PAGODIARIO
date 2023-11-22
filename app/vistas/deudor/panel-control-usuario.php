@@ -11,9 +11,6 @@ $fila = mysqli_num_rows($resultado);
 
 $tiene_pendientes = $fila > 0;
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<?php include_once('./componentes/head.php') ?>
 
 <body>
     <?php include_once('./componentes/user-header.php') ?>
@@ -21,7 +18,7 @@ $tiene_pendientes = $fila > 0;
         <?php
         if ($tiene_pendientes) {
         ?>
-            <h2 class='vista-titulo'>Ya solicito un prestamo, hagale seguimiento <a href="./solicitudes.php" class="link">Aquí.</a> </h2>
+            <h2 class='vista-titulo'>Ya solicito un prestamo, hagale seguimiento <a href="./vistas/solicitudes-deudor.php" class="link">Aquí.</a> </h2>
         <?php } else {
         ?>
             <form action='./php/ingresar-prestamo.php' method='POST'>
@@ -81,8 +78,3 @@ $tiene_pendientes = $fila > 0;
         <?php } ?>
     </main>
 </body>
-<footer class="fot">
-    <label class="text">Copyright © Todos los derechos reservados</label>
-</footer>
-
-</html>
