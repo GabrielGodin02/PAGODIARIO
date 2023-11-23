@@ -1,8 +1,8 @@
 <?php
 include './php/conexion.php';
 
-$email =$_POST['email'];
-$ident =$_POST['ident'];
+$email = $_POST['email'];
+$ident = $_POST['ident'];
 session_start();
 
 $consulta = "SELECT * FROM registro WHERE ident='$ident' AND email='$email'";

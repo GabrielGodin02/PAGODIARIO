@@ -13,5 +13,5 @@
     -->
     <link rel="stylesheet" href="public/css/estilo-login.css">
     <link rel="stylesheet" href="public/css/style.css">
-       <title>PAGODIARIO</title>
+       <title>pagodiarios - pide tu prestamo hoy</title>
 </head>

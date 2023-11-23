@@ -52,11 +52,11 @@ main {
 form {
   margin-top: 20px;
 }
+
 footer {
-  text-align: center;
-  background-color: rgb(0, 128, 156);
-  height: 70px;
+  display: none;
 }
+
 nav .container {
   display: inline-flex;
 }
@@ -211,10 +211,13 @@ label {
   display: flex;
   align-items: center;
 }
+.lista li i {
+  margin-right: 10px;
+}
 .lista .selected {
   background-color: white;
 }
-.lista .selected a {
+.lista .selected a, .lista .selected i {
   color: rgb(0, 128, 156);
 }
 /* Mostrar la lista al hacer clic en el logotipo */
@@ -295,10 +298,10 @@ label {
     padding-inline: 10px;
     color: white;
   }
-  .lista li a {
+  .lista li a, .lista li i {
     color: white;
   }
-  .lista li a:hover {
+  .lista li a:hover, .lista li i:hover, .lista li {
     color: rgb(255, 221, 27);
   }
   nav .container {
@@ -313,5 +316,10 @@ label {
   }
   .gg {
     display: flex;
+  }
+  footer {
+    text-align: center;
+    background-color: rgb(0, 128, 156);
+    height: 70px;
   }
 }
