@@ -3,12 +3,20 @@
 
 class AuthController
 {
-
-
     public function showLoginForm()
     {
         // Muestra el formulario de registro
-        include 'app/vistas/login.php';
+        include_once 'app/vistas/login.php';
+    }
+    public function showRegisterForm()
+    {
+        // Muestra el formulario de registro
+        include 'app/vistas/registro.php';
+    }
+    public function showRecoveryForm()
+    {
+        // Muestra el formulario de registro
+        include 'app/vistas/recuperar-contrasenia.php';
     }
     public function loginUser()
     {
@@ -16,10 +24,10 @@ class AuthController
             $email = $_POST['email'];
             $ident = $_POST['ident'];
             $consulta = "SELECT * FROM registro WHERE ident='$ident' AND email='$email'";
-    
+
             $resultado = hacerConsulta($consulta);
             $fila = mysqli_num_rows($resultado);
-            
+
             if ($fila) {
                 // Autenticación exitosa, guarda la identificación en una variable de sesión
                 $_SESSION['user'] =  mysqli_fetch_array($resultado);
@@ -45,16 +53,11 @@ class AuthController
             </html>
            '
                 );
-                include("app/vistas/login.php");
+                $this->showLoginForm();
             }
         }
 
         mysqli_free_result($resultado);
-    }
-    public function showRegisterForm()
-    {
-        // Muestra el formulario de registro
-        include 'app/vistas/registro.php';
     }
     public function registerUser()
     {
@@ -93,5 +96,15 @@ class AuthController
             exit();
         }
         header("Location: /");
+    }
+    public function recoverUser()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        }
+    }
+    public function logoutUser()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        }
     }
 }

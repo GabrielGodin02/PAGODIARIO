@@ -6,9 +6,6 @@ $sql = "SELECT  cantida_prestamo,dia_solicitado,prestamo.estado  FROM prestamo W
 $query = mysqli_query($conexion, $sql);
 $row = mysqli_fetch_array($query);
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<?php include_once('./componentes/head.php') ?>
 <body>
     <?php include_once('./componentes/user-header.php') ?>
     <main>
@@ -40,5 +37,3 @@ $row = mysqli_fetch_array($query);
     </main>
 
 </body>
-
-</html>

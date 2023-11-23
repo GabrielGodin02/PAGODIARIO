@@ -9,9 +9,6 @@ checkAdmin();
     $query = mysqli_query($conexion,$sql);
     $row = mysqli_fetch_array($query);
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<?php include_once('./componentes/head.php') ?>
 <body>
     <form action="" method="">
     <div class="card" style="width: 18rem;">
@@ -25,4 +22,3 @@ checkAdmin();
     </div>
     </form>
 </body>
-</html>
