@@ -1,27 +1,28 @@
 
 <!DOCTYPE html>
+<?php include_once('./app/componentes/head.php') // cabecera principal?>
 <html lang="en">
-<?php include_once('./public/componentes/head.php') // cabecera principal?>
-<?php
+    <?php
 // inicio de session
 session_start();
-// verificacion de url
-$_url = $_SERVER["REQUEST_URI"];
-$split_url = explode("/", $_url);
-$current_dir =  end($split_url);
-in_array("admin", $split_url);
-// Router de la app 
-switch ($current_dir) {
-    case '':
+// extraccion de url
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+// nav-bar
+include_once('./app/componentes/user-header.php'); 
+
+// Router/body de la app 
+switch ($uri) {
+    case '/':
         include_once('app/vistas/login.php');
         break;
-    case 'registro':
+    case '/registro':
         include_once('app/vistas/registro.php');
         break;
-    case 'recuperacion':
+    case '/recuperacion':
         include_once('app/vistas/recuperar-contraseña.php');
         break;
-    case 'solicitar':
+    case '/solicitar':
         include_once('app/vistas/deudor/panel-control-usuario.php');
         break;
     case '':
@@ -34,8 +35,7 @@ switch ($current_dir) {
 }
 ?>
 
-
-<!-- <footer>
+<footer class="fot">
     <label class="text">Copyright © Todos los derechos reservados</label>
-</footer> -->
+</footer> 
 </html>

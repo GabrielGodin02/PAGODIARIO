@@ -8,7 +8,6 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin: 100px;
         }
         h1 {
             color: #333;
@@ -17,6 +16,6 @@
 </head>
 <body>
     <h1>Error 404 - No encontrado</h1>
-    <p>Puede que la pagina que buscas este fuera de servicio o no exista.</p>
+    <p class="danger">Puede que la pagina que buscas este fuera de servicio o no exista.</p>
 </body>
 

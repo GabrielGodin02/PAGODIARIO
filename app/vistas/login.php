@@ -10,11 +10,11 @@
                     
                     <input type="password" placeholder="Contraseña" name="ident" required>
                     
-                    <button type="submit" title="Ingresar" name="Ingresar" required >Login</button>
+                    <button type="submit" title="Ingresar" name="Ingresar" required >Iniciar sesion</button>
                 </form>
                 <div class="pie-form">
-                    <a href="registro">¿Perdiste tu contraseña?</a>
-                    <a href="recuperacion">¿No tienes Cuenta? Registrate</a>
+                    <a href="/recuperacion">¿Perdiste tu contraseña?</a>
+                    <a href="/registro">¿No tienes Cuenta? Registrate</a>
                 </div>
             </div>
         </div>

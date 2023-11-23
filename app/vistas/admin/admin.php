@@ -3,16 +3,10 @@
 <?php
 include './php/conexion.php';
 
-$sql = "SELECT id_usuario, nombre, registro.direccion as direccion, email, telefono, id_prestamo,dia_solicitado, hora, cantida_prestamo, prestamo.estado as estado FROM registro, prestamo WHERE id_usuario=ident";
+$sql = "SELECT id_usuario, nombre, prestamo.direccion as direccion, email, telefono, id_prestamo,dia_solicitado, hora,cantidad, cantida_prestamo, profecion, fecha_solicitud, prestamo.estado as estado FROM registro, prestamo WHERE id_usuario=ident";
 $query = mysqli_query($conexion, $sql);
 $row = mysqli_fetch_array($query);
-//class=<?php echo '"'.strtolower($row["estado"]).'"'; 
 ?>
-
-
-<!DOCTYPE html>
-<html lang="en">
-<?php include_once('./componentes/head.php') ?>
 
 <body>
     <?php include_once('./componentes/user-header.php'); ?>
@@ -38,7 +32,10 @@ $row = mysqli_fetch_array($query);
                     <th scope="col">Telefono</th>
                     <th scope="col">Dia de prestamo</th>
                     <th scope="col">Hora</th>
-                    <th scope="col">Monto a Solicitar</th>
+                    <th scope="col">cantidad</th>
+                    <th scope="col">Monto a Solicitar Interes</th>
+                    <th scope="col">Profecion</th>
+                    <th scope="col">fecha de solicitud</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -57,7 +54,10 @@ $row = mysqli_fetch_array($query);
                             <td><?php echo $row['telefono'] ?></td>
                             <td><?php echo $row['dia_solicitado'] ?></td>
                             <td><?php echo $row['hora'] ?></td>
+                            <td><?php echo $row['cantidad'] ?></td>
                             <td>$<?php echo $row['cantida_prestamo'] ?></td>
+                            <td><?php echo $row['profecion'] ?></td>
+                            <td><?php echo $row['fecha_solicitud'] ?></td>
                             <td><a href="javascript:void(0);" class="botona" onclick="abrirModal('<?php echo $row['id_prestamo']; ?>')">Abonar</a></td>
                             <td><a href="./php/borrar.php?id=<?php echo $row['id_prestamo'] ?>" class="botona">Borrar</a></td>
                             <td>
@@ -169,8 +169,3 @@ $row = mysqli_fetch_array($query);
     </main>
 
 </body>
-<footer class="fot">
-    <label class="text">Copyright © Todos los derechos reservados</label>
-</footer>
-
-</html>

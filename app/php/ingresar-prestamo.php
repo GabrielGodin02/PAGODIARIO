@@ -5,10 +5,17 @@ $direccion =$_POST['direccion'];
 $telefono =$_POST['telefono'];
 $dia_solicitado =$_POST['dia_solicitado'];
 $hora =$_POST['hora'];
+$profecion =$_POST['profecion'];
+$cantidad =$_POST['cantida_prestamo'];
 $cantida_prestamo =$_POST['cantida_prestamo'];
 
+$cantidad = $cantidad;
+// Calcular el monto total del préstamo (incluyendo el 20% de interés)
+$tasaInteres = 0.20;
+$cantida_prestamo = $cantida_prestamo * (1 + $tasaInteres);
 
-$query = "INSERT INTO prestamo (id_usuario,direccion, telefono,dia_solicitado, hora, cantida_prestamo) VALUES ('$id_usuario','$direccion', '$telefono','$dia_solicitado','$hora', '$cantida_prestamo')";
+
+$query = "INSERT INTO prestamo (id_usuario,direccion, telefono,dia_solicitado, hora, profecion, cantidad, cantida_prestamo) VALUES ('$id_usuario','$direccion', '$telefono','$dia_solicitado','$hora','$profecion','$cantidad', '$cantida_prestamo')";
 
 
 $ejecutar=mysqli_query($conexion, $query);
