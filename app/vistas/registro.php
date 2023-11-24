@@ -23,15 +23,18 @@
                 </div>
             </div>
             <div class="gg">
-                <select class="form-select mb-3" aria-label="Default select example" name="estado" required>
-                    <option selected>Estado Civil</option>
-                    <option value="solter@">Solter@</option>
-                    <option value="casad@">Casad@</option>
-                    <option value="union libre">Union Libre</option>
-                </select>
+                <div class="form-floating mb-3">
+                    <select class="form-control" aria-label="Default select example" name="estado" required>
+                        <option selected>-- seleccionar --</option>
+                        <option value="solter@">Solter@</option>
+                        <option value="casad@">Casad@</option>
+                        <option value="union libre">Union Libre</option>
+                    </select>
+                    <label for="floatingPassword">Estado civil</label>
+                </div>
                 <div class="form-floating mb-3">
                     <input type="date" class="form-control" id="floatingPassword" placeholder="Fecha Nacimiento" name="fecha" required>
-                    <label for="floatingPassword">fecha</label>
+                    <label for="floatingPassword">Fecha</label>
                 </div>
             </div>
             <button class="boton_usuario">Registrar</button>

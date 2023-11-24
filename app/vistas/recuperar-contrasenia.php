@@ -14,7 +14,7 @@
               <h2 class="text-center">Perdiste tu Contraseña?</h2>
               <p>Puede restablecer su contraseña aquí.</p>
               <div class="panel-body login">
-                <form id="register-form" role="form" autocomplete="off" class="form" action="./php/actualizar-contraseña.php" method="post">
+                <form id="register-form" role="form" autocomplete="off" class="form" action="/recuperacion" method="post">
                   <div class="form-group">
                     <div class="input-group">
                       <span class="input-group-addon"><i class="fa fa-envelope color-blue"></i></span>

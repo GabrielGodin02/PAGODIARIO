@@ -2,8 +2,8 @@
 <header>
     <?php
     $links = [
-        'Iniciar sesion' => ['vista' => '/formulario-login', 'icono' => 'fa'],
-        'Registrarse' => ['vista' => '/formulario-registro', 'icono' => 'fa'],
+        'Iniciar sesion' => ['vista' => '/login', 'icono' => 'fa'],
+        'Registrarse' => ['vista' => '/registro', 'icono' => 'fa'],
     ];
     $user_links = [
         'Mi perfil' => ['vista' => 'perfil-usuario.php', 'icono' => 'fa'],
@@ -17,7 +17,7 @@
         'Control solicitudes' => ['vista' => 'vistas/admin/admin.php', 'icono' => 'fa']
     ];
     if ($_SESSION['auth']) $links = $admin_links;
-    if ($_SESSION['auth'] && $_SESSION['user']['admin']) $links = $admin_links;
+    if ($_SESSION['auth'] && $_SESSION['admin']) $links = $admin_links;
     ?>
     <nav>
         <div class="container">

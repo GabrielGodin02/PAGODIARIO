@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 // controladores
-require 'app/controllers/AuthController.php';
+require 'app/controllers/index.php';
 
 // inicio de session
 session_start();
@@ -17,6 +17,7 @@ require_once 'includes/utils/conexion.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <script src="public/js/monto.js"></script>
     <script src="public/js/java.js"></script>
@@ -32,18 +33,23 @@ require_once 'includes/utils/conexion.php';
 <?php
 // extraccion de url
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+// Verifica si la ruta requiere inicio de sesión
+$requiresLogin = in_array($uri, ['/deudor']) || in_array($uri, ['/admin']); // Agrega las rutas que requieren inicio de sesión
+// Verifica la autenticación si es necesario
+if ($requiresLogin && !isset($_SESSION['auth'])) {
+    // Redirecciona a la página de inicio de sesión
+    header("Location: /login");
+    exit();
+}
 // nav-bar
 include_once('app/componentes/nav_bar.php');
 // Router/body de la app 
 $auth = new AuthController();
 switch ($uri) {
     case '/': $auth->showLoginForm(); break;
-    case '/formulario-login': $auth->showLoginForm(); break;    
-    case '/formulario-registro': $auth->showRegisterForm(); break;
-    case '/formulario-recuperacion': $auth->showRecoveryForm(); break;
-    case '/login': $auth->loginUser(); break;
-    case '/registro': $auth->registerUser(); break;
-    case '/recuperacion': $auth->recoverUser(); break;
+    case '/login': $auth->showLoginForm(); break;
+    case '/registro': $auth->showRegisterForm(); break;
+    case '/recuperacion': $auth->showRecoveryForm(); break;
     case '/deudor':
         include_once('app/vistas/deudor/panel-control-usuario.php');
         break;

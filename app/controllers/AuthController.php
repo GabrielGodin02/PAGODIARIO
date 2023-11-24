@@ -6,11 +6,13 @@ class AuthController
     public function showLoginForm()
     {
         // Muestra el formulario de registro
+        $this->loginUser();
         include_once 'app/vistas/login.php';
     }
     public function showRegisterForm()
     {
         // Muestra el formulario de registro
+        $this->registerUser();
         include 'app/vistas/registro.php';
     }
     public function showRecoveryForm()
@@ -33,31 +35,21 @@ class AuthController
                 $_SESSION['user'] =  mysqli_fetch_array($resultado);
                 $_SESSION['auth'] = true;
                 $_SESSION['admin'] = mysqli_fetch_array($resultado)['admin'];
-                header("location: /deudor");
-            } else {
-                echo (
-                    '
-            <html lang="en">
-            <head>
-            </head>
-            <body>
-                <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                <script>
-                Swal.fire({
-                    icon: "error",
-                    title: "Algo Salio Mal",
-                    text: "Error En la Autenticacion!",
-                  })
-                </script>
-            </body>
-            </html>
-           '
-                );
-                $this->showLoginForm();
-            }
-        }
 
-        mysqli_free_result($resultado);
+                if ($_SESSION['admin']) header("location: /admin");
+                else header("location: /deudor");
+            } else { ?>
+                <script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "Algo Salio Mal",
+                        text: "Error En la Autenticacion!",
+                    })
+                </script>
+            <?php
+            }
+            mysqli_free_result($resultado);
+        }
     }
     public function registerUser()
     {
@@ -77,25 +69,22 @@ class AuthController
             $ejecucion = hacerConsulta($query);
 
             // devolver reultados
-            if ($ejecucion) {
-                echo '
+            if ($ejecucion) { ?>
                 <script>
-                alert("Datos Guardados");
-                window.location="/";
+                    alert("Datos Guardados");
+                    window.location = "/";
                 </script>
-                ';
-            } else {
-                echo '
+            <?php
+            } else { ?>
                 <script>
-                alert("Datos no Guardados");
-                window.location="/formulario-registro";
+                    alert("Datos no Guardados");
+                    window.location = "/formulario-registro";
                 </script>
-                ';
-            }
+<?php }
             // Redirecciona a la página de inicio de sesión u otra página
             exit();
+            header("Location: /");
         }
-        header("Location: /");
     }
     public function recoverUser()
     {
@@ -104,7 +93,9 @@ class AuthController
     }
     public function logoutUser()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        }
+        session_start();
+        session_destroy();
+        header('location: ../vistas/login.php');
+        die();
     }
 }
