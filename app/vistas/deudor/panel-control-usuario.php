@@ -13,10 +13,10 @@ $tiene_pendientes = $fila > 0;
 <main>
     <?php
     if ($tiene_pendientes) {
-    ?>
+        ?>
         <h2 class='vista-titulo'>Ya solicito un prestamo, hagale seguimiento <a href="./solicitudes.php" class="link">Aquí.</a> </h2>
-    <?php } else {
-    ?>
+        <?php } else {
+            ?>
         <form action='./php/ingresar-prestamo.php' method='POST'>
             <h2 class='vista-titulo'>Complete el formulario para solicitar un prestamo</h2>
             <div class="gg">
@@ -38,7 +38,7 @@ $tiene_pendientes = $fila > 0;
                     <input type="time" class="form-control" id="floatingInput" placeholder="Hora" name="hora" required>
                     <label for="floatingInput">Hora</label>
                 </div>
-
+                
                 <div class="form-floating mb-3">
                     <input type="number" class="form-control" id="cantida_prestamo" placeholder="Monto a Solicitar" name="cantida_prestamo" min="10000" required>
                     <label for="cantida_prestamo">Monto a Solicitar</label>
@@ -46,7 +46,7 @@ $tiene_pendientes = $fila > 0;
                     <p id="result" class="danger"></p>
                     <input type="hidden" id="resultado" name="resultado">
                 </div>
-
+                
                 <script>
                     const cantida_prestamoInput = document.getElementById('cantida_prestamo');
                     const resultParagraph = document.getElementById('result');
@@ -68,19 +68,22 @@ $tiene_pendientes = $fila > 0;
                     });
                 </script>
 
-                <div class="form-floating mb-3">
-                    <input type="date" class="form-control" id="floatingInput" placeholder="Monto a Solicitar" name="dia_solicitado" required>
-                    <label for="floatingInput">Dia Solicitado</label>
-                </div>
-            </div>
-            <div class="gg">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="A que se dedica" name="profecion" required>
-                    <label for="floatingInput">A que se Dedica</label>
-                </div>
-            </div>
+<div class="form-floating mb-3">
+    <input type="date" class="form-control" id="floatingInput" placeholder="Monto a Solicitar" name="dia_solicitado" required>
+    <label for="floatingInput">Dia Solicitado</label>
+</div>
+</div>
+<div class="gg">
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="floatingInput" placeholder="A que se dedica" name="profecion" required>
+        <label for="floatingInput">A que se Dedica</label>
+    </div>
+</div>
 
-            <button class="boton_usuario">Solicitar</button>
-        </form>
-    <?php } ?>
+<button class="boton_usuario">Solicitar</button>
+</form>
+<?php } 
+echo $_SESSION["admin"];
+
+?>
 </main>

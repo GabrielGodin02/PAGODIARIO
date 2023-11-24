@@ -34,7 +34,7 @@ class AuthController
                 // Autenticación exitosa, guarda la identificación en una variable de sesión
                 $_SESSION['user'] =  mysqli_fetch_array($resultado);
                 $_SESSION['auth'] = true;
-                $_SESSION['admin'] = mysqli_fetch_array($resultado)['admin'];
+                $_SESSION['admin'] = $_SESSION['user']['admin'];
 
                 if ($_SESSION['admin']) header("location: /admin");
                 else header("location: /deudor");
