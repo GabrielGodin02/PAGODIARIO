@@ -1,9 +1,4 @@
-<?php 
-include_once('../../php/auth.php');
-checkAdmin();
-?>
-
-<body>
+<main>
     <?php include('../../componentes/user-header.php')?>
 
-</body>
+</main>

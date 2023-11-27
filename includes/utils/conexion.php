@@ -5,7 +5,6 @@ $pw = "";
 $db = "visual";
 
 $conexion = mysqli_connect($host, $usr, $pw, $db);
-$_SESSION["auth"] = false;
 
 function hacerConsulta($sql)
 {

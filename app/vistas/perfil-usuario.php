@@ -1,5 +1,3 @@
-<?php include('./php/auth.php'); ?>
-
 <main>
     <h3 class="vista-titulo">Perfil de usuario</h3>
     <div class="container">

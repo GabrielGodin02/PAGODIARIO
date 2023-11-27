@@ -82,8 +82,8 @@ class AuthController
                 </script>
 <?php }
             // Redirecciona a la página de inicio de sesión u otra página
-            exit();
             header("Location: /");
+            exit();
         }
     }
     public function recoverUser()
@@ -93,9 +93,8 @@ class AuthController
     }
     public function logoutUser()
     {
-        session_start();
         session_destroy();
-        header('location: ../vistas/login.php');
+        header('location: /');
         die();
     }
 }

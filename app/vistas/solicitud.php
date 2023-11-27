@@ -1,15 +1,10 @@
 <?php
-include('./php/auth.php');
-checkAdmin();
-?>
-
-<?php
     include './php/conexion.php';
     $sql = "SELECT id_usuario, nombre, email, direccion, telefono,dia_solicitado, hora, cantida_prestamo  FROM registro, prestamo WHERE id_usuario=ident";
     $query = mysqli_query($conexion,$sql);
     $row = mysqli_fetch_array($query);
 ?>
-<body>
+<main>
     <form action="" method="">
     <div class="card" style="width: 18rem;">
         <div class="card-body">
@@ -21,4 +16,4 @@ checkAdmin();
         </div>
     </div>
     </form>
-</body>
+</main>

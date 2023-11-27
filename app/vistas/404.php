@@ -14,8 +14,8 @@
         }
     </style>
 </head>
-<body>
+<main>
     <h1>Error 404 - No encontrado</h1>
     <p class="danger">Puede que la pagina que buscas este fuera de servicio o no exista.</p>
-</body>
+    </main>
 

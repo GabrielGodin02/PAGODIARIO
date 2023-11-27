@@ -1,5 +1,4 @@
 <?php
-
 $ident = $_SESSION["user"]["ident"];
 
 $consulta = "SELECT * FROM prestamo WHERE id_usuario='$ident' AND (estado='pendiente' OR estado='Aceptada')";
@@ -14,7 +13,7 @@ $tiene_pendientes = $fila > 0;
     <?php
     if ($tiene_pendientes) {
         ?>
-        <h2 class='vista-titulo'>Ya solicito un prestamo, hagale seguimiento <a href="./solicitudes.php" class="link">Aquí.</a> </h2>
+        <h2 class='vista-titulo'>Ya solicito un prestamo, hagale seguimiento <a href="/deudor/mis-solicitudes" class="link">Aquí.</a> </h2>
         <?php } else {
             ?>
         <form action='./php/ingresar-prestamo.php' method='POST'>
@@ -82,8 +81,5 @@ $tiene_pendientes = $fila > 0;
 
 <button class="boton_usuario">Solicitar</button>
 </form>
-<?php } 
-echo $_SESSION["admin"];
-
-?>
+<?php } ?>
 </main>
