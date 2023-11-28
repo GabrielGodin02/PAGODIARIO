@@ -1,4 +1,3 @@
 <main>
-    <?php include('../../componentes/user-header.php')?>
-
+    <h3 class="vista-titulo">Reporte del mes</h3>
 </main>

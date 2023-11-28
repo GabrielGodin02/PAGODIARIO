@@ -1,44 +1,26 @@
-<?php
-$sql = "SELECT id_usuario, email, prestamo.direccion as direccion, telefono,dia_solicitado, hora, cantida_prestamo, prestamo.estado as p_estado  
-FROM registro, prestamo 
-WHERE id_usuario=ident";
-$query = mysqli_query($conexion, $sql);
-$row = mysqli_fetch_array($query);
-?>
-
 <main class="main">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th scope="col">direccion</th>
-                <th scope="col">Telefono</th>
-                <th scope="col">Dia de prestamo</th>
-                <th scope="col">Hora</th>
-                <th scope="col">Monto a Solicitar</th>
-                <th scope="col">Solicitud</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <?php
-            if ($row != null) {
-                do {
+    <h3 class="vista-titulo">Cobros del dia</h3>
+    <?php
+        foreach ($cobros as $key => $cobro) {
             ?>
-                    <tr>
-                        <td><?php echo $row['direccion'] ?></td>
-                        <td><?php echo $row['telefono'] ?></td>
-                        <td><?php echo $row['dia_solicitado'] ?></td>
-                        <td><?php echo $row['hora'] ?></td>
-                        <td>$<?php echo $row['cantida_prestamo'] ?></td>
-                        <td><?php echo $row['p_estado'] ?></td>
-                    </tr>
-
-            <?php
-                } while ($row = mysqli_fetch_array($query));
-            }
-            ?>
-        </tbody>
-
-    </table>
-
+            <div class="card mini-deuda">
+                <div class="card-header">
+                    <h4 class="card-title"><?php echo $cobro["nombre"] . ' ' . $cobro["apellidos"] ?></h4>
+                    <div><span class="card-data"><?php echo $cobro["direccion"] ?></span></div>
+                    <div><span class="card-data"><?php echo $cobro["telefono"] ?></span></div>
+                </div>
+                <div class="card-body">
+                    <div class="card-data">Solicitó: $<?php echo $cobro["cantidad"] ?></div>
+                    <div class="card-data">Debe: $<?php echo $cobro["cantida_prestamo"] ?></div>
+                    <div class="card-data">Hoy paga: $<?php echo ((float) $cobro["cantidad"]) * 0.20 ?></div>
+                </div>
+                <div class="card-footer ">
+                    <button class="btn btn-secondary" onclick="abrirModalAbono(<?php echo $cobro['id_prestamo'] ?>)">Abonar</button>
+                    <button class="btn btn-danger" onclick="abrirModalExcusa(<?php echo $cobro['id_prestamo'] ?>)">Hoy no abona</button>
+                </div>
+            </div>
+            <?php   
+    }
+    ?>
 </main>
+<?php include 'app/componentes/modals.php' ?>

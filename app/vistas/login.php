@@ -8,7 +8,7 @@
                 <form id="loginform" action="#" method="POST">
                     <input type="text" name="email" placeholder="Usuario" required>
     
-                    <input type="password" placeholder="Contraseña" name="ident" required>
+                    <input type="password" placeholder="Contraseña" name="passw" required>
     
                     <button type="submit" title="Ingresar" name="Ingresar" required>Iniciar sesion</button>
                 </form>
