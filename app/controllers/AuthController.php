@@ -1,8 +1,14 @@
 <?php
-// /app/controllers/AuthController.php
+require "app/helpers/Helpers.php";
 
 class AuthController
 {
+    public $helpers;
+
+    public function __construct()
+    {
+        $this->helpers = new Helpers();
+    }
     public function showLoginForm()
     {
         // Muestra el formulario de registro
@@ -38,16 +44,8 @@ class AuthController
 
                 if ($_SESSION['admin']) header("location: /admin");
                 else header("location: /deudor");
-            } else { ?>
-                <script>
-                    Swal.fire({
-                        icon: "error",
-                        title: "Algo Salio Mal",
-                        text: "Error En la Autenticacion!",
-                    })
-                </script>
-            <?php
             }
+            $this->helpers->showResult($fila, true);
             mysqli_free_result($resultado);
         }
     }
@@ -58,34 +56,26 @@ class AuthController
             $ident = $_POST['ident'];
             $nombre = $_POST['nombre'];
             $apellidos = $_POST['apellidos'];
-            $passw = $_POST['passw'];
+            $direccion = $_POST['direccion'];
             $email = $_POST['email'];
+            $passw = $_POST['passw'];
             $estado = $_POST['estado'];
+            $profesion = $_POST['profesion'];
             $fecha = $_POST['fecha'];
 
             // Guarda los datos en la base de datos (deberías usar sentencias preparadas)";
-            $query = 
-            "INSERT INTO registro (nombre, apellidos, ident, email, password, estado, fecha) 
-            VALUES ('$nombre', '$apellidos', '$ident', '$email', '$passw' '$estado', '$fecha')";
+            $query = "INSERT INTO registro (nombre, apellidos, direccion, ident, email, password, estado, profesion, fecha) 
+            VALUES ('$nombre', '$apellidos', '$direccion', '$ident', '$email', '$passw', '$estado', '$profesion', '$fecha')";
 
             // Ejecuta la consulta (deberías manejar errores y excepciones aquí)
             $ejecucion = hacerConsulta($query);
-
             // devolver reultados
-            if ($ejecucion) { ?>
-                <script>
-                    alert("Datos Guardados");
-                    window.location = "/";
-                </script>
-            <?php
-            } else { ?>
-                <script>
-                    alert("Datos no Guardados");
-                    window.location = "/registro";
-                </script>
-<?php }
+            if ($ejecucion) { 
+                header('location: /');
+            }
+            $this->helpers->showResult(($ejecucion));
             // Redirecciona a la página de inicio de sesión u otra página
-            exit();
+            //exit();
         }
     }
     public function recoverUser()

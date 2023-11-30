@@ -47,6 +47,12 @@
                     <label for="floatingPassword">Fecha</label>
                 </div>
             </div>
+            <div class="gg">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingPassword" placeholder="Dirección" name="direccion" required>
+                    <label for="floatingPassword">Dirección</label>
+                </div>
+            </div>
             <button class="boton_usuario">Registrar</button>
         </form>
 
