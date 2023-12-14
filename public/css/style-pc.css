@@ -50,7 +50,10 @@
     .gg {
       display: flex;
     }
-    .form-floating>label {
-      top: 0px;
+    .logo {
+      display: none;
     }
+    /*.form-floating>label {
+      top: 0px;
+    }*/
   }

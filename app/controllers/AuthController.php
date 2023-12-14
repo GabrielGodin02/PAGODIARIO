@@ -1,14 +1,9 @@
 <?php
-require "app/helpers/Helpers.php";
+require "app/models/Controller.php";
 
-class AuthController
+class AuthController extends Controller
 {
     public $helpers;
-
-    public function __construct()
-    {
-        $this->helpers = new Helpers();
-    }
     public function showLoginForm()
     {
         // Muestra el formulario de registro
@@ -36,6 +31,7 @@ class AuthController
             $resultado = hacerConsulta($consulta);
             $fila = mysqli_num_rows($resultado);
 
+            $this->showResult($fila);
             if ($fila) {
                 // Autenticación exitosa, guarda la identificación en una variable de sesión
                 $_SESSION['user'] =   mysqli_fetch_array($resultado);
@@ -45,8 +41,7 @@ class AuthController
                 if ($_SESSION['admin']) header("location: /admin");
                 else header("location: /deudor");
             }
-            $this->helpers->showResult($fila, true);
-            mysqli_free_result($resultado);
+            //mysqli_free_result($resultado);
         }
     }
     public function registerUser()
@@ -57,6 +52,7 @@ class AuthController
             $nombre = $_POST['nombre'];
             $apellidos = $_POST['apellidos'];
             $direccion = $_POST['direccion'];
+            $telefono = $_POST['telefono'];
             $email = $_POST['email'];
             $passw = $_POST['passw'];
             $estado = $_POST['estado'];
@@ -64,16 +60,14 @@ class AuthController
             $fecha = $_POST['fecha'];
 
             // Guarda los datos en la base de datos (deberías usar sentencias preparadas)";
-            $query = "INSERT INTO registro (nombre, apellidos, direccion, ident, email, password, estado, profesion, fecha) 
-            VALUES ('$nombre', '$apellidos', '$direccion', '$ident', '$email', '$passw', '$estado', '$profesion', '$fecha')";
+            $query = "INSERT INTO registro (nombre, apellidos, direccion, telefono, ident, email, password, estado, profesion, fecha) 
+            VALUES ('$nombre', '$apellidos', '$direccion', '$telefono', '$ident', '$email', '$passw', '$estado', '$profesion', '$fecha')";
 
             // Ejecuta la consulta (deberías manejar errores y excepciones aquí)
             $ejecucion = hacerConsulta($query);
             // devolver reultados
-            if ($ejecucion) { 
-                header('location: /');
-            }
-            $this->helpers->showResult(($ejecucion));
+            $this->showResult(($ejecucion));
+            if ($ejecucion) header('location: /');
             // Redirecciona a la página de inicio de sesión u otra página
             //exit();
         }

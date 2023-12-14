@@ -3,7 +3,7 @@
         <nav>
             <div class="container">
                 <div class="logo" onclick="toggleList()">
-                    <img src="/public/img/usuario.png">
+                    <i class="fa fa-bars"></i>
                 </div>
                 <?php if (isset($_SESSION['auth'])) { ?>
                     <h4 class='ident'>

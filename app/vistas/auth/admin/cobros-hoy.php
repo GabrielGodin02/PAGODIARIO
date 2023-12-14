@@ -11,7 +11,7 @@
                 </div>
                 <div class="card-body">
                     <div class="card-data">Solicitó: $<?php echo $cobro["cantidad"] ?></div>
-                    <div class="card-data">Debe: $<?php echo $cobro["cantida_prestamo"] ?></div>
+                    <div class="card-data">Debe: $<?php echo $cobro["deuda"] ?></div>
                     <div class="card-data">Hoy paga: $<?php echo ((float) $cobro["cantidad"]) * 0.20 ?></div>
                 </div>
                 <div class="card-footer ">

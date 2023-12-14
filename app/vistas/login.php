@@ -6,9 +6,9 @@
                     Bienvenido
                 </div>
                 <form id="loginform" action="#" method="POST">
-                    <input type="text" name="email" placeholder="Usuario" required>
+                    <input type="text" name="email" placeholder="Correo Electronico" required>
     
-                    <input type="password" placeholder="Contraseña" name="passw" required>
+                    <input type="password" name="passw" placeholder="Contraseña" required>
     
                     <button type="submit" title="Ingresar" name="Ingresar" required>Iniciar sesion</button>
                 </form>

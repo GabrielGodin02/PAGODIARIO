@@ -35,14 +35,14 @@
                     echo '
                     <script>
                         alert("Abono Realizado con exito y llego a cero");
-                        window.location="../vistas/admin/admin.php";
+                        window.location="../vistas/auth/admin/admin.php";
                     </script>
                     ';
                 } else {
                     echo '
                     <script>
                         alert("Abono realizado con éxito. Error al eliminar el registro");
-                        window.location="../vistas/admin/admin.php";
+                        window.location="../vistas/auth/admin/admin.php";
                     </script>
                     ';
                 }
@@ -50,7 +50,7 @@
                 echo '
                 <script>
                     alert("Abono realizado con éxito. Cantidad prestamo actualizada");
-                    window.location="../vistas/admin/admin.php";
+                    window.location="../vistas/auth/admin/admin.php";
                 </script>
                 ';
             }
