@@ -40,7 +40,7 @@ class UsersController extends Controller
             SET password=PASSWORD('$password')
             WHERE ident='$ident'";
 
-            $update_query = false; 
+            $update_query = false;
 
             if ($new_password == $cnew_password) {
                 $update_query = hacerConsulta($update_sql);

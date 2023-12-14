@@ -16,7 +16,7 @@
             </div>
             <div class="form-floating mb-3">
                 <input type="number" class="form-control" id="floatingInput" placeholder="numero de Telfono" name="telefono" required>
-                <label for="floatingPassword">Telfono</label>
+                <label for="floatingPassword">Telefono</label>
             </div>
             <div class="form-floating mb-3">
                 <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email" required>
@@ -40,7 +40,7 @@
                 <label for="floatingInput">Estado civil</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="date" class="form-control" id="floatingInput" placeholder="Fecha Nacimiento" name="fecha" required>
+                <input type="date" class="form-control" id="floatingInput" placeholder="Fecha Nacimiento" name="fecha" min="1940-01-01" max="<?php echo date('Y-m-d', strtotime('-18 years')); ?>" required>
                 <label for="floatingInput">Fecha de Nacimiento</label>
             </div>
             <div class="form-floating mb-3">

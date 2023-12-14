@@ -26,7 +26,7 @@ class AuthController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['email'];
             $passw = $_POST['passw'];
-            $consulta = "SELECT * FROM registro WHERE password='$passw' AND email='$email'";
+            $consulta = "SELECT * FROM registro WHERE password=PASSWORD('$passw') AND email='$email'";
 
             $resultado = hacerConsulta($consulta);
             $fila = mysqli_num_rows($resultado);
@@ -61,7 +61,7 @@ class AuthController extends Controller
 
             // Guarda los datos en la base de datos (deberías usar sentencias preparadas)";
             $query = "INSERT INTO registro (nombre, apellidos, direccion, telefono, ident, email, password, estado, profesion, fecha) 
-            VALUES ('$nombre', '$apellidos', '$direccion', '$telefono', '$ident', '$email', '$passw', '$estado', '$profesion', '$fecha')";
+            VALUES ('$nombre', '$apellidos', '$direccion', '$telefono', '$ident', '$email', PASSWORD('$passw'), '$estado', '$profesion', '$fecha')";
 
             // Ejecuta la consulta (deberías manejar errores y excepciones aquí)
             $ejecucion = hacerConsulta($query);

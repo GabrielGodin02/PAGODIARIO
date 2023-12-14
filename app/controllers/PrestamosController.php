@@ -53,6 +53,7 @@ class PrestamosController extends Controller
         $id_user = $_SESSION["user"]["ident"];
         $query = "SELECT * FROM prestamo WHERE id_usuario = '$id_user'";
         $prestamos = hacerConsulta($query);
+        return $prestamos;
     }
     public function readPrestamos()
     {
@@ -100,6 +101,7 @@ class PrestamosController extends Controller
             $ejecutar_query_solicitud = hacerConsulta($query_solicitud);
             $monto_solicitado = mysqli_fetch_array($ejecutar_query_solicitud)["cantidad"];
 
+            
             if ($estado != "Aceptada" || $_SESSION['user']['capital'] >= $monto_solicitado) {
 
                 $update_sql = "UPDATE prestamo SET estado ='$estado' WHERE id_prestamo ='$id_prestamo'";
@@ -132,24 +134,37 @@ class PrestamosController extends Controller
             $tasaInteres = 0.20;
             $cantida_prestamo = $cantidad * (1 + $tasaInteres);
 
-            $check_user = "SELECT * FROM registro WHERE ident='$user' AND password='$password'";
+            $check_user = "SELECT * FROM registro WHERE ident='$user' AND password=PASSWORD('$password')";
             $ejecutar  = false;
             $check_result = hacerConsulta($check_user);
+            $error_message = "Contraseña incorrecta.";
             if ($check_result && mysqli_num_rows($check_result) == 1) {
-                echo "asd";
-                /*if (
-                    !$this->readPrestamosPendientesUser()
-                ) {
-                    $direccion = $_SESSION["user"]["direccion"];
-                    $telefono = $_SESSION["user"]["telefono"];
+                $error_message = "Ya tienes un prestamo aceptado.";
+                if (
+                    !($this->readPrestamosPendientesUser())
+                    ) {
+                    $error_message = "Error al registrar tu solicitud, intentelo mas tarde.";
                     $query =
-                        "INSERT INTO prestamo (id_usuario, id_pagodiario, direccion, telefono, cantidad, deuda) 
-                        VALUES ('$user', '$pagodiario','$direccion', '$telefono','$cantidad', '$cantida_prestamo')";
-
+                        "INSERT INTO prestamo (id_usuario, id_pagodiario, cantidad, deuda) 
+                        VALUES ('$user', '$pagodiario','$cantidad', '$cantida_prestamo')";
                     $ejecutar = hacerConsulta($query);
-                }*/
+                }
             }
-            $this->showResult($ejecutar);
+            $this->showResult($ejecutar, errorMessage: $error_message);
         }
+    }
+    public function deletePrestamo()
+    {
+
+        $id = $_GET['id'];
+
+        $ejecutar = false;
+        if ($_SESSION['user']['admin']){
+            $query = "DELETE FROM prestamo WHERE id_prestamo='$id' ";
+            $ejecutar = hacerConsulta($query);
+        }
+
+        $this->showResult($ejecutar);
+        header('location: /admin/control-solicitudes');
     }
 }
