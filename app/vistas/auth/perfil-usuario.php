@@ -36,7 +36,7 @@
         <div class="container-sm card pb-4 col-md-9">
             <h3 class="vista-titulo"><i class="fa fa-phone"></i> Informacion de contacto</h3>
             <div class="container">
-                <form action='#' method='POST' id="user-edit-form">
+                <form action='' method='POST' id="user-edit-form">
                     <div class="form-floating mb-2"><input type="email" class="form-control" id="email" disabled value="<?php echo $_SESSION['user']['email'] ?>" name="email"><label for="email">Correo electronico</label></div>
                     <div class="form-floating mb-2"><input type="text" class="form-control" disabled value="<?php echo $_SESSION['user']['profesion'] ?>" name="profesion"><label for="profesion">Profesión</label></div>
                     <div class="form-floating mb-2"><input type="text" class="form-control" disabled value="<?php echo $_SESSION['user']['direccion'] ?>" name="direccion"><label for="fecha">Direccion</label></div>

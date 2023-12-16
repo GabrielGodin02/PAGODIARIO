@@ -140,9 +140,6 @@ p.danger {
 }
 
 .estado{
-  margin: 5px;
-  padding: 10px;
-  border-radius: 5px;
   color: white;
   background-color: #888;
 }

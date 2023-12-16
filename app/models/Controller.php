@@ -9,18 +9,29 @@ class Controller
         String $errorMessage =  "Error En la Autenticacion!"
 
     ) {
-        if ($result) { 
-            ?>
+        if ($result) {
+?>
             <script>
                 alert('<?php echo $successMessage ?>');
             </script>
         <?php
-        } else { 
-            ?>
+            return true;
+        } else {
+        ?>
             <script>
                 alert('<?php echo $errorMessage ?>');
             </script>
 <?php
+            return false;
         }
+    }
+    public function checkToken()
+    {
+        $token =$_SESSION["token"];
+        $user = $_SESSION["user"]["ident"];
+        $query = "SELECT * FROM inicio_sesion WHERE token = '$token' AND id_usuario = '$user'";
+
+        $resultado = hacerConsulta($query);
+        return $resultado;
     }
 }

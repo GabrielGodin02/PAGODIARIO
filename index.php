@@ -38,12 +38,14 @@ switch ($uri) { // Router/body de la app
     case '/deudor/mi-perfil':$user->showUpdateUserForm(); break;
     case '/deudor/cambiar-contrasenia': $user->showUpdatePasswordForm(); break;
     case '/deudor/mis-solicitudes':$soli->showSolicitudesUser(); break;
+    case '/deudor/mis-solicitudes/delete': $soli->deletePrestamo(); break;
     case '/admin':$soli->showCobrosDelDia(); break;
     case '/admin/mi-perfil': $user->showUpdateUserForm(); break;
     case '/admin/cambiar-contrasenia': $user->showUpdatePasswordForm(); break;
     case '/admin/reporte': $soli->showReporte(); break;
     case '/admin/control-solicitudes':$soli->showSolicitudes(); break;
     case '/admin/control-solicitudes/update': $soli->updatePrestamoStatus(); break;
+    case '/admin/control-solicitudes/delete': $soli->deletePrestamo(); break;
     case '/logout': $auth->logoutUser(); break;
     default:
         http_response_code(404);

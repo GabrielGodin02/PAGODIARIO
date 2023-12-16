@@ -6,7 +6,7 @@
     <?php } else {
     ?>
         <div class="card p-4 mt-4 container-sm">
-            <form action='#' method='POST' class="">
+            <form action='' method='POST' class="">
                 <h3 class='vista-titulo'>Complete el formulario para solicitar un prestamo</h3>
                 <div class="form-floating mb-2">
                     <input type="number" class="form-control" id="cantida_prestamo" placeholder="Monto a Solicitar" name="cantida_prestamo" min="10000" required>

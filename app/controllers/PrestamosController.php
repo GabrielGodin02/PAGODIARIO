@@ -1,9 +1,12 @@
 <?php
-
+/*
+    show: conjunta el include de la vista y las peticiones que se deben hacer en la misma
+    crud: los metodos que ejecutan 1 consulta empiezan por la palabra del C.R.U.D que la describe
+*/
 class PrestamosController extends Controller
 {
-    public bool $tiene_pendientes;
-    public array $cobros;
+    public bool $tiene_pendientes; // solo aplica al deudor
+    public array $cobros; // solo aplica al pagodiario
     public array $solicitudes;
     public function showPrestamoForm()
     {
@@ -20,7 +23,7 @@ class PrestamosController extends Controller
     }
     public function showSolicitudes()
     {
-        $this->readPrestamos();
+        $this->readPrestamos("estado = 'pendiente'");
         $soli = $this;
         include 'app/vistas/auth/admin/solicitudes.php';
     }
@@ -55,13 +58,18 @@ class PrestamosController extends Controller
         $prestamos = hacerConsulta($query);
         return $prestamos;
     }
-    public function readPrestamos()
+    public function readPrestamos($condicion = null)
     {
+        $and = "";
+        if (is_string($condicion)) {
+            $and = "AND $condicion";
+        }
         $query =
             "SELECT *
                 FROM registro, prestamo 
                 WHERE registro.ident = prestamo.id_usuario
-                AND prestamo.id_pagodiario = " . $_SESSION['user']['ident'];
+                AND prestamo.id_pagodiario = " . $_SESSION['user']['ident'] .
+                $and;
         $resultado = hacerConsulta($query);
         if ($resultado) {
             $this->solicitudes = $resultado->fetch_all(MYSQLI_ASSOC);
@@ -95,32 +103,35 @@ class PrestamosController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id_prestamo = $_POST['id_prestamo'];
             $estado = $_POST['estado'];
-            $query_solicitud = "SELECT * 
+            $result = false;
+            $err_msg = "Estado Invalido";
+            if ($estado === 'Aceptada' || $estado === 'Rechazada') {
+                $query_solicitud = "SELECT * 
                         FROM prestamo 
                         WHERE id_prestamo = $id_prestamo";
-            $ejecutar_query_solicitud = hacerConsulta($query_solicitud);
-            $monto_solicitado = mysqli_fetch_array($ejecutar_query_solicitud)["cantidad"];
+                $ejecutar_query_solicitud = hacerConsulta($query_solicitud);
+                $monto_solicitado = mysqli_fetch_array($ejecutar_query_solicitud)["cantidad"];
 
-            
-            if ($estado != "Aceptada" || $_SESSION['user']['capital'] >= $monto_solicitado) {
-
-                $update_sql = "UPDATE prestamo SET estado ='$estado' WHERE id_prestamo ='$id_prestamo'";
-                $update_query = hacerConsulta($update_sql);
-
-                $this->showResult(
-                    $update_query,
-                    showSuccess: true,
-                    successMessage: "Prestamo $estado",
-                    errorMessage: "No se pudo hacer el cambio"
-                );
-            } else {
-                $this->showResult(false, errorMessage: "No tienes suficiente capital para hacer este prestamo");
-            } ?>
-            <script>
-                window.location = "/admin/control-solicitudes"
-            </script>
-<?php
+                $err_msg = "No tienes suficiente capital para hacer este prestamo";
+                if ($estado == "Rechazada" || $_SESSION['user']['capital'] >= $monto_solicitado) {
+                    $update_sql = "UPDATE prestamo SET estado ='$estado' WHERE id_prestamo ='$id_prestamo'";
+                    $update_query = hacerConsulta($update_sql);
+                    $result = $update_query;
+                    $err_msg = "No se pudo hacer el cambio";
+                }
+            }
         }
+        $this->showResult(
+            $result,
+            showSuccess: true,
+            successMessage: "Solicitud $estado",
+            errorMessage: $err_msg
+        );
+?>
+        <script>
+            window.location = "/admin/control-solicitudes"
+        </script>
+<?php
     }
     public function createPrestamo()
     {
@@ -142,7 +153,7 @@ class PrestamosController extends Controller
                 $error_message = "Ya tienes un prestamo aceptado.";
                 if (
                     !($this->readPrestamosPendientesUser())
-                    ) {
+                ) {
                     $error_message = "Error al registrar tu solicitud, intentelo mas tarde.";
                     $query =
                         "INSERT INTO prestamo (id_usuario, id_pagodiario, cantidad, deuda) 
@@ -155,16 +166,22 @@ class PrestamosController extends Controller
     }
     public function deletePrestamo()
     {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $id = $_GET['soli'];
 
-        $id = $_GET['id'];
-
-        $ejecutar = false;
-        if ($_SESSION['user']['admin']){
-            $query = "DELETE FROM prestamo WHERE id_prestamo='$id' ";
-            $ejecutar = hacerConsulta($query);
+            $ejecutar = false;
+            if ($this->checkToken()) {
+                $query = "DELETE FROM prestamo WHERE id_prestamo='$id'";
+                $ejecutar = hacerConsulta($query);
+            }
+            $this->showResult(
+                $ejecutar,
+                true,
+                true,
+                errorMessage: "No se pudo eliminar la solicitud",
+                successMessage: "Solicitud eliminada correctamente",
+            );
         }
-
-        $this->showResult($ejecutar);
-        header('location: /admin/control-solicitudes');
+        $this->showSolicitudesUser();
     }
 }
