@@ -23,7 +23,7 @@ class PrestamosController extends Controller
     }
     public function showSolicitudes()
     {
-        $this->readPrestamos("estado = 'pendiente'");
+        $this->readPrestamos("prestamo.estado = 'pendiente'");
         $soli = $this;
         include 'app/vistas/auth/admin/solicitudes.php';
     }
@@ -38,39 +38,38 @@ class PrestamosController extends Controller
     public function readCobrosDelDia()
     {
         $sql =
-            "SELECT id_prestamo, id_usuario, email,
-             prestamo.direccion as direccion, 
-            nombre, apellidos, telefono,dia_solicitado, hora, cantida_prestamo, 
+            "SELECT id_prestamo, id_usuario, email, direccion, 
+            nombre, apellidos, telefono, fecha_solicitud, deuda,
             prestamo.estado as p_estado, cantidad
             FROM registro, prestamo 
             WHERE id_usuario = ident 
+            AND id_pagodiario = ?
             AND prestamo.estado = 'Aceptada'";
 
-        $query = hacerConsulta($sql);
+        $query = hacerConsulta($sql, [$_SESSION['user']['ident']]);
         $cobros = $query->fetch_all(MYSQLI_ASSOC);
-        $this->$cobros = $cobros;
         return $cobros;
     }
     public function readPrestamosUser()
     {
         $id_user = $_SESSION["user"]["ident"];
-        $query = "SELECT * FROM prestamo WHERE id_usuario = '$id_user'";
-        $prestamos = hacerConsulta($query);
+        $query = "SELECT * FROM prestamo WHERE id_usuario = ?";
+        $prestamos = hacerConsulta($query, [$id_user]);
         return $prestamos;
     }
     public function readPrestamos($condicion = null)
     {
         $and = "";
         if (is_string($condicion)) {
-            $and = "AND $condicion";
+            $and = " AND $condicion";
         }
         $query =
             "SELECT *
                 FROM registro, prestamo 
                 WHERE registro.ident = prestamo.id_usuario
-                AND prestamo.id_pagodiario = " . $_SESSION['user']['ident'] .
-                $and;
-        $resultado = hacerConsulta($query);
+                AND prestamo.id_pagodiario = ?".
+            $and;
+        $resultado = hacerConsulta($query, [$_SESSION['user']['ident']]);
         if ($resultado) {
             $this->solicitudes = $resultado->fetch_all(MYSQLI_ASSOC);
         } else {
@@ -82,8 +81,8 @@ class PrestamosController extends Controller
     public function readPrestamosPendientesUser()
     {
         $id_user = $_SESSION["user"]["ident"];
-        $query = "SELECT * FROM prestamo WHERE id_usuario='$id_user' AND (estado='pendiente' OR estado='Aceptada')";
-        $prestamos = hacerConsulta($query);
+        $query = "SELECT * FROM prestamo WHERE id_usuario= ? AND (estado='pendiente' OR estado='Aceptada')";
+        $prestamos = hacerConsulta($query, [$id_user]);
         $cantidad_prestamos = mysqli_num_rows($prestamos);
         $this->tiene_pendientes = $cantidad_prestamos > 0;
         return $this->tiene_pendientes;
@@ -106,16 +105,14 @@ class PrestamosController extends Controller
             $result = false;
             $err_msg = "Estado Invalido";
             if ($estado === 'Aceptada' || $estado === 'Rechazada') {
-                $query_solicitud = "SELECT * 
-                        FROM prestamo 
-                        WHERE id_prestamo = $id_prestamo";
-                $ejecutar_query_solicitud = hacerConsulta($query_solicitud);
+                $query_solicitud = "SELECT * FROM prestamo WHERE id_prestamo = ?";
+                $ejecutar_query_solicitud = hacerConsulta($query_solicitud, [$id_prestamo]);
                 $monto_solicitado = mysqli_fetch_array($ejecutar_query_solicitud)["cantidad"];
 
                 $err_msg = "No tienes suficiente capital para hacer este prestamo";
                 if ($estado == "Rechazada" || $_SESSION['user']['capital'] >= $monto_solicitado) {
-                    $update_sql = "UPDATE prestamo SET estado ='$estado' WHERE id_prestamo ='$id_prestamo'";
-                    $update_query = hacerConsulta($update_sql);
+                    $update_sql = "UPDATE prestamo SET estado = ? WHERE id_prestamo = ?";
+                    $update_query = hacerConsulta($update_sql, [$estado, $id_prestamo]);
                     $result = $update_query;
                     $err_msg = "No se pudo hacer el cambio";
                 }
@@ -145,23 +142,22 @@ class PrestamosController extends Controller
             $tasaInteres = 0.20;
             $cantida_prestamo = $cantidad * (1 + $tasaInteres);
 
-            $check_user = "SELECT * FROM registro WHERE ident='$user' AND password=PASSWORD('$password')";
-            $ejecutar  = false;
-            $check_result = hacerConsulta($check_user);
+            $check_user = "SELECT * FROM registro WHERE ident = ? AND password=PASSWORD(?)";
+            $resultado  = false;
+            $check_result = hacerConsulta($check_user, [$user, $password]);
             $error_message = "Contraseña incorrecta.";
             if ($check_result && mysqli_num_rows($check_result) == 1) {
                 $error_message = "Ya tienes un prestamo aceptado.";
-                if (
-                    !($this->readPrestamosPendientesUser())
-                ) {
+                if (!($this->readPrestamosPendientesUser())) 
+                {
                     $error_message = "Error al registrar tu solicitud, intentelo mas tarde.";
                     $query =
                         "INSERT INTO prestamo (id_usuario, id_pagodiario, cantidad, deuda) 
-                        VALUES ('$user', '$pagodiario','$cantidad', '$cantida_prestamo')";
-                    $ejecutar = hacerConsulta($query);
+                        VALUES (?, ?, ?, ?)";
+                    $resultado = hacerConsulta($query, [$user, $pagodiario, $cantidad, $cantida_prestamo]);
                 }
             }
-            $this->showResult($ejecutar, errorMessage: $error_message);
+            $this->showResult($resultado, errorMessage: $error_message);
         }
     }
     public function deletePrestamo()
@@ -171,8 +167,11 @@ class PrestamosController extends Controller
 
             $ejecutar = false;
             if ($this->checkToken()) {
-                $query = "DELETE FROM prestamo WHERE id_prestamo='$id'";
-                $ejecutar = hacerConsulta($query);
+                $query = "DELETE FROM prestamo WHERE id_prestamo= ?";
+                if (!$_SESSION["user"]["admin"]) {
+                    $query = $query . " AND estado != 'Aceptada'";
+                }
+                $ejecutar = hacerConsulta($query, [$id]);
             }
             $this->showResult(
                 $ejecutar,

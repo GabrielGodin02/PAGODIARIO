@@ -16,8 +16,8 @@ class UsersController extends Controller
     }
     public function readUserById($id)
     {
-        $consulta = "SELECT * FROM registro WHERE ident='$id'";
-        $resultado = hacerConsulta($consulta);
+        $consulta = "SELECT * FROM registro WHERE ident= ?";
+        $resultado = hacerConsulta($consulta, [$id]);
         return mysqli_fetch_array($resultado);
     }
     public function readCurrentUser()
@@ -37,13 +37,13 @@ class UsersController extends Controller
 
             $update_sql =
                 "UPDATE registro 
-            SET password=PASSWORD('$password')
-            WHERE ident='$ident'";
+            SET password=PASSWORD(?)
+            WHERE ident=(?)";
 
             $update_query = false;
 
             if ($new_password == $cnew_password) {
-                $update_query = hacerConsulta($update_sql);
+                $update_query = hacerConsulta($update_sql, [$password, $ident]);
             }
 
             $this->showResult($update_query, showSuccess: true);
@@ -61,9 +61,9 @@ class UsersController extends Controller
 
             $update_sql =
                 "UPDATE registro 
-                SET direccion='$direccion', email='$email', profesion='$profesion', estado='$estado', telefono='$telefono' 
-                WHERE ident='$ident'";
-            $update_query = hacerConsulta($update_sql);
+                SET direccion = (?) , email = (?) , profesion = (?) , estado = (?) , telefono = (?)
+                WHERE ident = (?)";
+            $update_query = hacerConsulta($update_sql, [$direccion, $email, $profesion, $estado, $telefono, $ident]);
 
             $this->showResult($update_query, showSuccess: true);
         }

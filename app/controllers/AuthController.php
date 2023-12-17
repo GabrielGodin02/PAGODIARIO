@@ -46,9 +46,9 @@ class AuthController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['email'];
             $passw = $_POST['passw'];
-            $consulta = "SELECT * FROM registro WHERE password=PASSWORD('$passw') AND email='$email'";
+            $consulta = "SELECT * FROM registro WHERE password=PASSWORD(?) AND email = ?";
 
-            $resultado = hacerConsulta($consulta);
+            $resultado = hacerConsulta($consulta, [$email, $passw]);
             $fila = mysqli_num_rows($resultado);
 
             $this->showResult($fila);
@@ -84,10 +84,12 @@ class AuthController extends Controller
 
             // Guarda los datos en la base de datos (deberías usar sentencias preparadas)";
             $query = "INSERT INTO registro (nombre, apellidos, direccion, telefono, ident, email, password, estado, profesion, fecha) 
-            VALUES ('$nombre', '$apellidos', '$direccion', '$telefono', '$ident', '$email', PASSWORD('$passw'), '$estado', '$profesion', '$fecha')";
+            VALUES (?, ?, ?, ?, ?, ?, PASSWORD(?), ?, ?, ?)";
 
             // Ejecuta la consulta (deberías manejar errores y excepciones aquí)
-            $ejecucion = hacerConsulta($query);
+            $ejecucion = hacerConsulta($query, [
+                $nombre, $apellidos, $direccion, $telefono, $ident, $email, $passw, $estado, $profesion, $fecha
+            ]);
             // devolver reultados
             $this->showResult(($ejecucion));
             if ($ejecucion) header('location: /');
@@ -103,8 +105,8 @@ class AuthController extends Controller
     public function logoutUser()
     {
         $token =  $_SESSION['token'];
-        $query = "DELETE FROM inicio_sesion WHERE token = '$token'";
-        hacerConsulta($query);
+        $query = "DELETE FROM inicio_sesion WHERE token = ?";
+        hacerConsulta($query, [$token]);
         session_destroy();
         header('location: /');
         die();

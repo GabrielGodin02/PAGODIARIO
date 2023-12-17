@@ -5,7 +5,7 @@
             ?>
             <div class="card mini-deuda">
                 <div class="card-header">
-                    <h4 class="card-title"><?php echo $cobro["nombre"] . ' ' . $cobro["apellidos"] ?></h4>
+                    <span class="fw-bold fs-4"><?php echo $cobro["nombre"] . ' ' . $cobro["apellidos"] ?></span>
                     <div><span class="card-data"><?php echo $cobro["direccion"] ?></span></div>
                     <div><span class="card-data"><?php echo $cobro["telefono"] ?></span></div>
                 </div>
