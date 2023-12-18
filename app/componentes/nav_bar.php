@@ -6,7 +6,7 @@
                     <i class="fa fa-bars"></i>
                 </div>
                 <?php if (isset($_SESSION['auth'])) { ?>
-                    <h4 class='ident'>
+                    <h4 class='hero'>
                         <?php echo $_SESSION['user']['nombre'] . ' ' . $_SESSION['user']['apellidos'] . ($_SESSION['user']['admin'] ? ' | Admin' : ' | Deudor') ?>
                     </h4>
                 <?php } ?>

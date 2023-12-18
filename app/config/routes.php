@@ -7,6 +7,6 @@ $routes = [
     '/deudor/mi-perfil' => ['alias' => 'Mi perfil', 'icono' => 'fa'],
     '/admin' => ['alias' => 'Cobros', 'icono' => 'fa'],
     '/admin/reporte' => ['alias' => 'Reporte mensual', 'icono' => 'fa'],
-    '/admin/control-solicitudes' => ['alias' => 'Control solicitudes', 'icono' => 'fa'],
+    '/admin/control-solicitudes?state=pendiente' => ['alias' => 'Control solicitudes', 'icono' => 'fa'],
     '/admin/mi-perfil' => ['alias' => 'Mi perfil', 'icono' => 'fa'],
 ];

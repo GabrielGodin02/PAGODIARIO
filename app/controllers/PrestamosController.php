@@ -12,7 +12,6 @@ class PrestamosController extends Controller
     {
         $this->createPrestamo();
         $this->readPrestamosPendientesUser();
-        $this->readPagodiarios();
         $soli = $this;
         include 'app/vistas/auth/deudor/panel-control-usuario.php';
     }
@@ -23,12 +22,16 @@ class PrestamosController extends Controller
     }
     public function showSolicitudes()
     {
-        $this->readPrestamos("prestamo.estado = 'pendiente'");
+        $idc = isset($_GET["search"]) ? $_GET["search"] : false;
+        $condicion = "prestamo.estado = 'pendiente'";
+        if ($idc && is_numeric($idc)) $condicion = $condicion . " AND CAST(prestamo.id_usuario as CHAR) like '%$idc%'";
+        $this->readPrestamos($condicion);
         $soli = $this;
         include 'app/vistas/auth/admin/solicitudes.php';
     }
     public function showSolicitudesUser()
     {
+        $prestamos = $this->readPrestamosUser();
         include 'app/vistas/auth/deudor/solicitudes-deudor.php';
     }
     public function showReporte()
@@ -52,9 +55,13 @@ class PrestamosController extends Controller
     }
     public function readPrestamosUser()
     {
-        $id_user = $_SESSION["user"]["ident"];
-        $query = "SELECT * FROM prestamo WHERE id_usuario = ?";
-        $prestamos = hacerConsulta($query, [$id_user]);
+        $userIdent = $_SESSION['user']['ident'];
+        $sql = "SELECT  id_prestamo, cantidad, deuda, fecha_solicitud, prestamo.estado, 
+            (SELECT CONCAT(nombre,' ',apellidos) FROM registro WHERE ident = prestamo.id_pagodiario) as pagodiario
+            FROM prestamo 
+            WHERE id_usuario = ?";
+        $resultado = hacerConsulta($sql, [$userIdent]);
+        $prestamos = $resultado->fetch_all(MYSQLI_ASSOC);
         return $prestamos;
     }
     public function readPrestamos($condicion = null)

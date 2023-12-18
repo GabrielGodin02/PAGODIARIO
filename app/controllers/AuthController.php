@@ -26,20 +26,22 @@ class AuthController extends Controller
     }
     public function showLoginForm()
     {
-        // Muestra el formulario de registro
         $this->loginUser();
         include_once 'app/vistas/login.php';
     }
     public function showRegisterForm()
     {
-        // Muestra el formulario de registro
         $this->registerUser();
         include 'app/vistas/registro.php';
     }
     public function showRecoveryForm()
     {
-        // Muestra el formulario de registro
         include 'app/vistas/recuperar-contrasenia.php';
+    }
+    public function showUpdatePasswordForm()
+    {
+        $this->updateUserPassword();
+        include 'app/vistas/auth/update-password.php';
     }
     public function loginUser()
     {
@@ -48,7 +50,7 @@ class AuthController extends Controller
             $passw = $_POST['passw'];
             $consulta = "SELECT * FROM registro WHERE password=PASSWORD(?) AND email = ?";
 
-            $resultado = hacerConsulta($consulta, [$email, $passw]);
+            $resultado = hacerConsulta($consulta, [$passw, $email]);
             $fila = mysqli_num_rows($resultado);
 
             $this->showResult($fila);
@@ -91,8 +93,8 @@ class AuthController extends Controller
                 $nombre, $apellidos, $direccion, $telefono, $ident, $email, $passw, $estado, $profesion, $fecha
             ]);
             // devolver reultados
-            $this->showResult(($ejecucion));
             if ($ejecucion) header('location: /');
+            $this->showResult(($ejecucion));
             // Redirecciona a la página de inicio de sesión u otra página
             //exit();
         }
@@ -100,6 +102,29 @@ class AuthController extends Controller
     public function recoverUser()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        }
+    }
+    public function updateUserPassword()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $ident =  $_SESSION['user']['ident'];
+            $password = $_POST['old'];
+            $new_password = $_POST['new'];
+            $cnew_password = $_POST['confirm_new'];
+
+            $token = $_SESSION['token'];
+            $update_sql =
+                "UPDATE registro 
+            SET password=PASSWORD(?)
+            WHERE ident=(?) AND (SELECT * FROM inicio_sesion WHERE token = ? AND id_usuario = ident)";
+
+            $update_query = false;
+
+            if ($new_password == $cnew_password) {
+                $update_query = hacerConsulta($update_sql, [$password, $ident, $token]);
+            }
+
+            $this->showResult($update_query, showSuccess: true);
         }
     }
     public function logoutUser()
