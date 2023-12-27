@@ -39,7 +39,7 @@ class UsersController extends Controller
                 WHERE ident = (?)";
             $update_query = hacerConsulta($update_sql, [$direccion, $email, $profesion, $estado, $telefono, $ident]);
 
-            $this->showResult($update_query, showSuccess: true);
+            showResult($update_query, showSuccess: true);
         }
     }
 }

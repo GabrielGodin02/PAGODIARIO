@@ -1,8 +1,9 @@
 <main class="main">
     <h3 class="vista-titulo">Cobros del dia</h3>
     <?php
+    if (count($cobros)) {
         foreach ($cobros as $key => $cobro) {
-            ?>
+    ?>
             <div class="card mini-deuda">
                 <div class="card-header">
                     <span class="fw-bold fs-4"><?php echo $cobro["nombre"] . ' ' . $cobro["apellidos"] ?></span>
@@ -19,7 +20,10 @@
                     <button class="btn btn-danger" onclick="abrirModalExcusa(<?php echo $cobro['id_prestamo'] ?>)">Hoy no abona</button>
                 </div>
             </div>
-            <?php   
+    <?php
+        }
+    } else {
+        NoRegistrosComponent();
     }
     ?>
 </main>

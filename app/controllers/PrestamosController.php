@@ -23,8 +23,8 @@ class PrestamosController extends Controller
     public function showSolicitudes()
     {
         $idc = isset($_GET["search"]) ? $_GET["search"] : false;
-        $condicion = "prestamo.estado = 'pendiente'";
-        if ($idc && is_numeric($idc)) $condicion = $condicion . " AND CAST(prestamo.id_usuario as CHAR) like '%$idc%'";
+        $condicion = "";
+        if ($idc && is_numeric($idc)) $condicion = "CAST(prestamo.id_usuario as CHAR) like '%$idc%'";
         $this->readPrestamos($condicion);
         $soli = $this;
         include 'app/vistas/auth/admin/solicitudes.php';
@@ -47,7 +47,18 @@ class PrestamosController extends Controller
             FROM registro, prestamo 
             WHERE id_usuario = ident 
             AND id_pagodiario = ?
-            AND prestamo.estado = 'Aceptada'";
+            AND prestamo.estado = 'Aceptada' AND NOT EXISTS (
+                SELECT 1
+                FROM abono
+                WHERE abono.id_prestamo = prestamo.id_prestamo
+                    AND DATE(abono.fecha) = CURDATE()
+            )
+            AND NOT EXISTS (
+                SELECT 1
+                FROM excusas
+                WHERE excusas.id_prestamo = prestamo.id_prestamo
+                    AND DATE(excusas.fecha) = CURDATE()
+            );";
 
         $query = hacerConsulta($sql, [$_SESSION['user']['ident']]);
         $cobros = $query->fetch_all(MYSQLI_ASSOC);
@@ -74,7 +85,7 @@ class PrestamosController extends Controller
             "SELECT *
                 FROM registro, prestamo 
                 WHERE registro.ident = prestamo.id_usuario
-                AND prestamo.id_pagodiario = ?".
+                AND prestamo.id_pagodiario = ?" .
             $and;
         $resultado = hacerConsulta($query, [$_SESSION['user']['ident']]);
         if ($resultado) {
@@ -104,20 +115,21 @@ class PrestamosController extends Controller
             return [];
         }
     }
-    public function updatePrestamoStatus()
+    public function updatePrestamoStatus($prestamo = false, $status = false)
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id_prestamo = $_POST['id_prestamo'];
-            $estado = $_POST['estado'];
+
+            $id_prestamo = is_string($prestamo) ? $prestamo : $_POST['id_prestamo'];
+            $estado =  is_string($status) ? $status : $_POST['estado'];
             $result = false;
-            $err_msg = "Estado Invalido";
-            if ($estado === 'Aceptada' || $estado === 'Rechazada') {
+            $err_msg = "Estado Invalido " . $estado;
+            if ($estado === 'Aceptada' || $estado === 'Rechazada' || $estado === 'Completado') {
                 $query_solicitud = "SELECT * FROM prestamo WHERE id_prestamo = ?";
                 $ejecutar_query_solicitud = hacerConsulta($query_solicitud, [$id_prestamo]);
                 $monto_solicitado = mysqli_fetch_array($ejecutar_query_solicitud)["cantidad"];
 
                 $err_msg = "No tienes suficiente capital para hacer este prestamo";
-                if ($estado == "Rechazada" || $_SESSION['user']['capital'] >= $monto_solicitado) {
+                if ($estado == "Rechazada" ||  $_SESSION['user']['capital'] >= $monto_solicitado || $estado === 'Completado') {
                     $update_sql = "UPDATE prestamo SET estado = ? WHERE id_prestamo = ?";
                     $update_query = hacerConsulta($update_sql, [$estado, $id_prestamo]);
                     $result = $update_query;
@@ -125,17 +137,17 @@ class PrestamosController extends Controller
                 }
             }
         }
-        $this->showResult(
+        showResult(
             $result,
             showSuccess: true,
             successMessage: "Solicitud $estado",
             errorMessage: $err_msg
         );
 ?>
-        <script>
-            window.location = "/admin/control-solicitudes"
-        </script>
-<?php
+   
+
+    <?php
+        return $result;
     }
     public function createPrestamo()
     {
@@ -155,8 +167,7 @@ class PrestamosController extends Controller
             $error_message = "Contraseña incorrecta.";
             if ($check_result && mysqli_num_rows($check_result) == 1) {
                 $error_message = "Ya tienes un prestamo aceptado.";
-                if (!($this->readPrestamosPendientesUser())) 
-                {
+                if (!($this->readPrestamosPendientesUser())) {
                     $error_message = "Error al registrar tu solicitud, intentelo mas tarde.";
                     $query =
                         "INSERT INTO prestamo (id_usuario, id_pagodiario, cantidad, deuda) 
@@ -164,7 +175,7 @@ class PrestamosController extends Controller
                     $resultado = hacerConsulta($query, [$user, $pagodiario, $cantidad, $cantida_prestamo]);
                 }
             }
-            $this->showResult($resultado, errorMessage: $error_message);
+            showResult($resultado, errorMessage: $error_message);
         }
     }
     public function deletePrestamo()
@@ -180,7 +191,7 @@ class PrestamosController extends Controller
                 }
                 $ejecutar = hacerConsulta($query, [$id]);
             }
-            $this->showResult(
+            showResult(
                 $ejecutar,
                 true,
                 true,
@@ -189,5 +200,62 @@ class PrestamosController extends Controller
             );
         }
         $this->showSolicitudesUser();
+    }
+    public function payPrestamo()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id_prestamo = $_POST['id_prestamo'];
+            $monto_abono = $_POST['monto'];
+
+            $sql = "SELECT deuda FROM prestamo WHERE id_prestamo = ?";
+            $query = hacerConsulta($sql, [$id_prestamo]);
+            $row = mysqli_fetch_array($query);
+
+            if (showResult($row && $this->checkToken(), errorMessage: "no encontrado")) {
+                $cantidad_prestamo_actual = $row['deuda'];
+
+                // Realizar el abono restando el monto ingresado
+                $cantidad_prestamo_actual -= $monto_abono;
+
+                // Actualizar la cantidad_prestamo en la base de datos
+                $update_sql = "UPDATE prestamo SET deuda = ? WHERE id_prestamo = ?";
+                $update_query = hacerConsulta($update_sql, [$cantidad_prestamo_actual, $id_prestamo]);
+
+                if (showResult($update_query, true, true, "Abono realizado con éxito.", "no se pudo realizar el abono")) {
+                    // Verificar si la cantidad_prestamo llegó a cero y marcar copletada el registro si es así
+                    $create_sql = "INSERT INTO abono(id_prestamo, monto) VALUES (?, ?)";
+                    $create_query = hacerConsulta($create_sql, [$id_prestamo, $monto_abono]);
+                    if ($cantidad_prestamo_actual <= 0) {
+                        $cantidad_prestamo_actual = 0;
+                        showResult(
+                            $this->updatePrestamoStatus($id_prestamo, "Completado"),
+                            successMessage: "Prestamo paz y salvo."
+                        );
+                    }
+                }
+            }
+        }
+        redirect("/admin");
+    }
+    public function excusePrestamo()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id_prestamo = $_POST['id_prestamo'];
+            $motivo = $_POST['motivo'];
+
+            // revisa si el prestamo existe
+            $sql = "SELECT deuda FROM prestamo WHERE id_prestamo = ?";
+            $query = hacerConsulta($sql, [$id_prestamo]);
+            $row = mysqli_fetch_array($query);
+
+            if (showResult($row && $this->checkToken(), errorMessage: "no encontrado")) {
+                // Crear una excusa
+                $create_sql = "INSERT INTO excusas(id_prestamo, motivo) VALUES (?,?)";
+                $create_query = hacerConsulta($create_sql, [$id_prestamo, $motivo]);
+
+                showResult($create_query, true, true, successMessage: "Deuda excusada por hoy", errorMessage: "No se pudo excusar la deuda");
+            }
+        }
+        redirect("/admin");
     }
 }

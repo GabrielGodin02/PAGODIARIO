@@ -53,7 +53,7 @@ class AuthController extends Controller
             $resultado = hacerConsulta($consulta, [$passw, $email]);
             $fila = mysqli_num_rows($resultado);
 
-            $this->showResult($fila);
+            showResult($fila);
             if ($fila) {
                 // Autenticación exitosa, guarda la identificación en una variable de sesión
                 $_SESSION['user'] = mysqli_fetch_array($resultado);
@@ -94,7 +94,7 @@ class AuthController extends Controller
             ]);
             // devolver reultados
             if ($ejecucion) header('location: /');
-            $this->showResult(($ejecucion));
+            showResult(($ejecucion));
             // Redirecciona a la página de inicio de sesión u otra página
             //exit();
         }
@@ -124,7 +124,7 @@ class AuthController extends Controller
                 $update_query = hacerConsulta($update_sql, [$password, $ident, $token]);
             }
 
-            $this->showResult($update_query, showSuccess: true);
+            showResult($update_query, showSuccess: true);
         }
     }
     public function logoutUser()

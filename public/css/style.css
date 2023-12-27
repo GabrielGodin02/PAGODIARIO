@@ -152,7 +152,7 @@ p.danger {
 .estado.aceptada {
   background-color: rgb(31, 142, 31);
 }
-.estado.completada {
+.estado.completado {
   background-color: rgb(26, 128, 187);
 }
 

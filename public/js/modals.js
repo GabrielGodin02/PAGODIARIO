@@ -1,6 +1,6 @@
 function abrirModalAbono(id_prestamo) {
     let modal = document.getElementById("modalAbono");
-    let usuarioIdInput = document.getElementById("usuario_id");
+    let usuarioIdInput = document.getElementById("abonar_prestamo_id");
     usuarioIdInput.value = id_prestamo;
     modal.style.display = "block";
 }
@@ -10,10 +10,9 @@ function cerrarModalAbono() {
     modal.style.display = "none";
 }
 
-
 function abrirModalExcusa(id_prestamo) {
     let modal = document.getElementById("modalExcusa");
-    let usuarioIdInput = document.getElementById("usuario_id");
+    let usuarioIdInput = document.getElementById("excusar_prestamo_id");
     usuarioIdInput.value = id_prestamo;
     modal.style.display = "block";
 }

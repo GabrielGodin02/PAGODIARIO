@@ -4,10 +4,12 @@ ini_set('display_errors', 1);
 // extraccion de url
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 session_start(); // inicio de sesion
-// controladores - configuracion - base de datos
+// controladores - configuracion - helpers - componentes - base de datos
 require 'includes/utils/conexion.php';
 require 'app/config/index.php';
+require 'app/helpers/index.php';
 require 'app/controllers/index.php';
+require 'app/componentes/index.php';
 ?>
 
 <!DOCTYPE html>
@@ -46,6 +48,8 @@ switch ($uri) { // Router/body de la app
     case '/admin/control-solicitudes':$soli->showSolicitudes(); break;
     case '/admin/control-solicitudes/update': $soli->updatePrestamoStatus(); break;
     case '/admin/control-solicitudes/delete': $soli->deletePrestamo(); break;
+    case '/admin/prestamos/abonar': $soli->payPrestamo(); break;
+    case '/admin/prestamos/excusar': $soli->excusePrestamo(); break;
     case '/logout': $auth->logoutUser(); break;
     default:
         http_response_code(404);
