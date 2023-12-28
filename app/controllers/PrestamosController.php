@@ -23,8 +23,11 @@ class PrestamosController extends Controller
     public function showSolicitudes()
     {
         $idc = isset($_GET["search"]) ? $_GET["search"] : false;
+        $state = isset($_GET["state"]) ? $_GET["state"] : false;
         $condicion = "";
-        if ($idc && is_numeric($idc)) $condicion = "CAST(prestamo.id_usuario as CHAR) like '%$idc%'";
+        if ($state && is_string($state)) $condicion = "prestamo.estado = '" . $state . "'";
+        if ($state && is_string($state) && $idc && is_numeric($idc)) $condicion = $condicion . " AND ";
+        if ($idc && is_numeric($idc)) $condicion = $condicion . "CAST(prestamo.id_usuario as CHAR) like '%$idc%'";
         $this->readPrestamos($condicion);
         $soli = $this;
         include 'app/vistas/auth/admin/solicitudes.php';
@@ -78,7 +81,7 @@ class PrestamosController extends Controller
     public function readPrestamos($condicion = null)
     {
         $and = "";
-        if (is_string($condicion)) {
+        if (is_string($condicion) && $condicion != "") {
             $and = " AND $condicion";
         }
         $query =
@@ -187,7 +190,7 @@ class PrestamosController extends Controller
             if ($this->checkToken()) {
                 $query = "DELETE FROM prestamo WHERE id_prestamo= ?";
                 if (!$_SESSION["user"]["admin"]) {
-                    $query = $query . " AND estado != 'Aceptada'";
+                    $query = $query . " AND estado = 'pendiente'";
                 }
                 $ejecutar = hacerConsulta($query, [$id]);
             }

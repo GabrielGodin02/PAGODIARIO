@@ -46,7 +46,7 @@ switch ($uri) { // Router/body de la app
     case '/admin/cambiar-contrasenia': $auth->showUpdatePasswordForm(); break;
     case '/admin/reporte': $soli->showReporte(); break;
     case '/admin/control-solicitudes':$soli->showSolicitudes(); break;
-    case '/admin/control-solicitudes/update': $soli->updatePrestamoStatus(); break;
+    case '/admin/control-solicitudes/update': $soli->updatePrestamoStatus(); redirect('/admin/control-solicitudes'); break;
     case '/admin/control-solicitudes/delete': $soli->deletePrestamo(); break;
     case '/admin/prestamos/abonar': $soli->payPrestamo(); break;
     case '/admin/prestamos/excusar': $soli->excusePrestamo(); break;

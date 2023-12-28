@@ -1,12 +1,13 @@
 <main class="main">
     <h3 class="vista-titulo">Control de Solicitudes</h3>
-    
+
     <table class="table table-striped table-hover mt-0">
         <form action="" method="get">
-        <?php FilterOptionsComponent() ?>
-        <thead>
-            <tr>
-                <td colspan="11" class="search-cell">
+            <?php FilterOptionsComponent()
+            ?>
+            <thead>
+                <tr>
+                    <td colspan="11" class="search-cell">
                         <span>Consultar por numero de documento</span>
                         <input type="number" name="search">
                         <button type="submit">
@@ -15,6 +16,7 @@
                     </td>
                 </tr>
                 <tr>
+                    <th class="estado"></th>
                     <th scope="col">Documento</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Solicita</th>
@@ -26,33 +28,40 @@
                 </tr>
             </thead>
         </form>
-            
+
         <tbody>
             <?php
-            foreach ($soli->solicitudes as $solicitud) {
+            if (count($soli->solicitudes)) {
+                foreach ($soli->solicitudes as $solicitud) {
             ?>
-                <tr class="usuario">
-                    <th scope="row" class="ident"><?php echo $solicitud['ident'] ?></th>
-                    <td><?php echo $solicitud['nombre'] . " " . $solicitud['apellidos'] ?></td>
-                    <td <?php if ($_SESSION['user']['capital'] < $solicitud['cantidad']) { ?> class="text-danger" <?php } ?>>$<?php echo $solicitud['cantidad'] ?></td>
-                    <td><?php echo $solicitud['direccion'] ?></td>
-                    <td><?php echo $solicitud['telefono'] ?></td>
-                    <td><?php echo $solicitud['profesion'] ?></td>
-                    <td><?php echo $solicitud['fecha_solicitud'] ?></td>
-                    <td>
-                        <form action='/admin/control-solicitudes/update' method='POST' class="row gap-2 mx-2">
-                            <input type="hidden" name="id_prestamo" value="<?php echo $solicitud['id_prestamo']; ?>">
-                            <button class="btn btn-danger col-auto" name="estado" value="Rechazada"><i class="fa fa-trash me-2"></i>Rechazar</button>
-                            <?php if ($_SESSION['user']['capital'] >= $solicitud['cantidad']) { ?>
-                                <button class="btn btn-success col-auto" name="estado" value="Aceptada"><i class="fa fa-check me-2"></i>Aceptar</button>
-                            <?php } ?>
-                        </form>
-                    </td>
-                </tr>
+                    <tr class="usuario">
+                        <td class="estado <?php echo strtolower($solicitud['estado']) ?>"></td>
+                        <th scope="row" class="ident"><?php echo $solicitud['ident'] ?></th>
+                        <td><?php echo $solicitud['nombre'] . " " . $solicitud['apellidos'] ?></td>
+                        <td <?php if ($_SESSION['user']['capital'] < $solicitud['cantidad']) { ?> class="text-danger" <?php } ?>>$<?php echo $solicitud['cantidad'] ?></td>
+                        <td><?php echo $solicitud['direccion'] ?></td>
+                        <td><?php echo $solicitud['telefono'] ?></td>
+                        <td><?php echo $solicitud['profesion'] ?></td>
+                        <td><?php echo $solicitud['fecha_solicitud'] ?></td>
+                        <td>
+                            <form action='/admin/control-solicitudes/update' method='POST' class="row gap-2 mx-2">
+                                <input type="hidden" name="id_prestamo" value="<?php echo $solicitud['id_prestamo']; ?>">
+                                <?php if ( $solicitud['estado'] === "pendiente") { ?>
+                                <button class="btn btn-danger col-auto" name="estado" value="Rechazada"><i class="fa fa-trash me-2"></i>Rechazar</button>
+                                <?php } ?>
+
+                                <?php if ($_SESSION['user']['capital'] >= $solicitud['cantidad']) { ?>
+                                    <button class="btn btn-success col-auto" name="estado" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="No tienes suficiente capital para hacer este prestamo" value="Aceptada"><i class="fa fa-check me-2"></i>Aceptar</button>
+                                <?php } ?>
+                            </form>
+                        </td>
+                    </tr>
 
             <?php
-            }
-            ?>
+                }
+            } else {
+                NoRegistrosComponent();
+            } ?>
         </tbody>
     </table>
 </main>

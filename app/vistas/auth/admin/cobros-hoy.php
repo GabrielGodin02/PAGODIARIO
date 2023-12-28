@@ -23,7 +23,7 @@
     <?php
         }
     } else {
-        NoRegistrosComponent();
+        NoRegistrosComponent("No quedan cobros para hoy");
     }
     ?>
 </main>
