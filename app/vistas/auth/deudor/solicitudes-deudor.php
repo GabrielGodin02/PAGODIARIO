@@ -23,7 +23,7 @@
                         <td class="estado <?php echo strtolower($row['estado']) ?>"></td>
                         <th scope="row"><?php echo $row['pagodiario'] ?></th>
                         <td scope="row">$<?php echo $row['cantidad'] ?></td>
-                        <td>$<?php echo $row['deuda'] < 0 ? 0 : $row['deuda'] ?></td>
+                        <td><?php if ($row['estado'] != "Rechazada" && $row["estado"] != "pendiente") { ?> $<?php echo $row['deuda'] < 0 ? 0 : $row['deuda']; } else echo "---" ?></td>
                         <td><?php echo date("d-m-Y", strtotime($row['fecha_solicitud'])) ?></td>
                         <td <?php if ($row["estado"] == "pendiente") { ?>class="row" <?php } ?>>
                             <?php if ($row["estado"] == "pendiente") { ?>
@@ -41,7 +41,13 @@
                     </tr>
             <?php }
             } else {
-                NoRegistrosComponent();
+                ?>
+                <tr>
+                    <td colspan="9">
+                        <?php NoRegistrosComponent() ?>
+                    </td>
+                </tr>
+            <?php
             } ?>
         </tbody>
     </table>
