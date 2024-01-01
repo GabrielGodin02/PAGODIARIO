@@ -18,6 +18,7 @@ require 'app/componentes/index.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="/public/css/index.css">
     <title>pagodiarios - pide tu prestamo hoy</title>
 </head>
@@ -38,14 +39,15 @@ switch ($uri) { // Router/body de la app
     case '/deudor/mis-solicitudes':$soli->showSolicitudesUser(); break;
     case '/deudor/mis-solicitudes/delete': $soli->deletePrestamo(); break;
     case '/admin':$soli->showCobrosDelDia(); break;
+    case '/admin/abonar': $soli->payPrestamo(); $soli->showCobrosDelDia(); break;
+    case '/admin/excusar': $soli->excusePrestamo(); $soli->showCobrosDelDia(); break;
     case '/admin/mi-perfil': $user->showUpdateUserForm(); break;
     case '/admin/cambiar-contrasenia': $auth->showUpdatePasswordForm(); break;
     case '/admin/reporte': $soli->showReporte(); break;
-    case '/admin/control-solicitudes':$soli->showSolicitudes(); break;
-    case '/admin/control-solicitudes/update': $soli->updatePrestamoStatus(); redirect('/admin/control-solicitudes'); break;
-    case '/admin/control-solicitudes/delete': $soli->deletePrestamo(); break;
-    case '/admin/prestamos/abonar': $soli->payPrestamo(); break;
-    case '/admin/prestamos/excusar': $soli->excusePrestamo(); break;
+    case '/admin/control-solicitudes': $soli->showSolicitudes($user); break;
+    case '/admin/control-solicitudes/update': $soli->updatePrestamoStatus(); $soli->showSolicitudes($user); break;
+    case '/admin/control-solicitudes/complete': $soli->completePrestamo(); $soli->showSolicitudes($user); break;
+    //case '/admin/control-solicitudes/abonar': $soli->payPrestamo(); $soli->showSolicitudes(); break;
     case '/logout': $auth->logoutUser(); break;
     default:
         http_response_code(404);
@@ -59,7 +61,6 @@ switch ($uri) { // Router/body de la app
 <script src="/public/js/modals.js"></script>
 <script src="/public/js/java.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 

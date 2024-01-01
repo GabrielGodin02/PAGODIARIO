@@ -21,3 +21,14 @@ function cerrarModalExcusa() {
     let modal = document.getElementById("modalExcusa");
     modal.style.display = "none";
 }
+
+function setConfirmCompleteId(id_prestamo) {
+    let usuarioIdInput = document.getElementById("confirm_complete_id");
+    usuarioIdInput.value = id_prestamo;
+    modal.style.display = "block";
+}
+function setConfirmRejectId(id_prestamo) {
+    let usuarioIdInput = document.getElementById("confirm_reject_id");
+    usuarioIdInput.value = id_prestamo;
+    modal.style.display = "block";
+}

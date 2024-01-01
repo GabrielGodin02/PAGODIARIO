@@ -20,8 +20,9 @@ class PrestamosController extends Controller
         $cobros = $this->readCobrosDelDia();
         include 'app/vistas/auth/admin/cobros-hoy.php';
     }
-    public function showSolicitudes()
+    public function showSolicitudes($user)
     {
+        $user->readCurrentUser();
         $idc = isset($_GET["search"]) ? $_GET["search"] : false;
         $state = isset($_GET["state"]) ? $_GET["state"] : false;
         $condicion = "";
@@ -169,16 +170,21 @@ class PrestamosController extends Controller
             $check_result = hacerConsulta($check_user, [$user, $password]);
             $error_message = "Contraseña incorrecta.";
             if ($check_result && mysqli_num_rows($check_result) == 1) {
-                $error_message = "Ya tienes un prestamo aceptado.";
-                if (!($this->readPrestamosPendientesUser())) {
-                    $error_message = "Error al registrar tu solicitud, intentelo mas tarde.";
-                    $query =
-                        "INSERT INTO prestamo (id_usuario, id_pagodiario, cantidad, deuda) 
+                $check_pagodiario = "SELECT * FROM registro WHERE ident = ? AND admin = 1";
+                $check_result_pagodiario = hacerConsulta($check_pagodiario, [$pagodiario]);
+                $error_message = "Pagodiario no identificado";
+                if ($check_result_pagodiario && mysqli_num_rows($check_result_pagodiario) == 1) {
+                    $error_message = "Ya tienes un prestamo aceptado.";
+                    if (!($this->readPrestamosPendientesUser())) {
+                        $error_message = "Error al registrar tu solicitud, intentelo mas tarde.";
+                        $query =
+                            "INSERT INTO prestamo (id_usuario, id_pagodiario, cantidad, deuda) 
                         VALUES (?, ?, ?, ?)";
-                    $resultado = hacerConsulta($query, [$user, $pagodiario, $cantidad, $cantida_prestamo]);
+                        $resultado = hacerConsulta($query, [$user, $pagodiario, $cantidad, $cantida_prestamo]);
+                    }
                 }
+                showResult($resultado, errorMessage: $error_message);
             }
-            showResult($resultado, errorMessage: $error_message);
         }
     }
     public function deletePrestamo()
@@ -204,11 +210,11 @@ class PrestamosController extends Controller
         }
         $this->showSolicitudesUser();
     }
-    public function payPrestamo()
+    public function payPrestamo($id = false, $monto = false)
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id_prestamo = $_POST['id_prestamo'];
-            $monto_abono = $_POST['monto'];
+            $id_prestamo = $id ? $id : $_POST['id_prestamo'];
+            $monto_abono = $monto ? $monto : $_POST['monto'];
 
             $sql = "SELECT deuda FROM prestamo WHERE id_prestamo = ?";
             $query = hacerConsulta($sql, [$id_prestamo]);
@@ -222,7 +228,9 @@ class PrestamosController extends Controller
 
                 // Actualizar la cantidad_prestamo en la base de datos
                 $update_sql = "UPDATE prestamo SET deuda = ? WHERE id_prestamo = ?";
-                $update_query = hacerConsulta($update_sql, [$cantidad_prestamo_actual, $id_prestamo]);
+                $update_query = false;
+                if (is_numeric($monto_abono) && $monto_abono > 0)
+                    $update_query = hacerConsulta($update_sql, [$cantidad_prestamo_actual, $id_prestamo]);
 
                 if (showResult($update_query, true, true, "Abono realizado con éxito.", "no se pudo realizar el abono")) {
                     // Verificar si la cantidad_prestamo llegó a cero y marcar copletada el registro si es así
@@ -238,7 +246,6 @@ class PrestamosController extends Controller
                 }
             }
         }
-        redirect("/admin");
     }
     public function excusePrestamo()
     {
@@ -259,6 +266,20 @@ class PrestamosController extends Controller
                 showResult($create_query, true, true, successMessage: "Deuda excusada por hoy", errorMessage: "No se pudo excusar la deuda");
             }
         }
-        redirect("/admin");
+    }
+    public function completePrestamo()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id_prestamo = $_POST['id_prestamo'];
+
+            $sql = "SELECT deuda FROM prestamo WHERE id_prestamo = ?";
+            $query = hacerConsulta($sql, [$id_prestamo]);
+            $row = mysqli_fetch_array($query);
+
+            if ($row && $this->checkToken()) {
+                $cantidad_prestamo_actual = $row['deuda'];
+                $this->payPrestamo($id_prestamo, $cantidad_prestamo_actual);
+            }
+        }
     }
 }

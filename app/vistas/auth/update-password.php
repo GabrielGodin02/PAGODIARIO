@@ -8,7 +8,7 @@
                 </h5>
             </div>
             <div class="card-body">
-                <form action="" class="form">
+                <form action="" class="form" method="post">
                     <div class="mb-3 form-floating"><input class="form-control" id="old" type="password" name="old"><label for="old">Contraseña anterior</label></div>
                     <div class="mb-3 form-floating"><input class="form-control" id="new" type="password" name="new"><label for="new">Nueva Contraseña</label></div>
                     <div class="mb-3 form-floating"><input class="form-control" id="confirm_new" type="password" name="confirm_new"><label for="confirm_new">Confirmar Contraseña</label></div>

@@ -116,12 +116,14 @@ class AuthController extends Controller
             $update_sql =
                 "UPDATE registro 
             SET password=PASSWORD(?)
-            WHERE ident=(?) AND (SELECT * FROM inicio_sesion WHERE token = ? AND id_usuario = ident)";
+            WHERE ident=(?)
+             AND EXISTS (SELECT 1 FROM inicio_sesion WHERE token = ? AND id_usuario = ident) 
+             AND password=PASSWORD(?)";
 
             $update_query = false;
 
             if ($new_password == $cnew_password) {
-                $update_query = hacerConsulta($update_sql, [$password, $ident, $token]);
+                $update_query = hacerConsulta($update_sql, [$new_password, $ident, $token, $password]);
             }
 
             showResult($update_query, showSuccess: true);

@@ -11,14 +11,22 @@ function showResult(
     if ($result) {
 ?>
         <script>
-            alert('<?php echo $successMessage ?>');
+            Swal.fire({
+                title: "Exito",
+                text: "<?php echo $successMessage ?>",
+                icon: "success"
+            })
         </script>
     <?php
         return true;
     } else {
     ?>
         <script>
-            alert('<?php echo $errorMessage ?>');
+            Swal.fire({
+                title: "Error",
+                text: "<?php echo $errorMessage ?>",
+                icon: "error"
+            })
         </script>
 <?php
         return false;

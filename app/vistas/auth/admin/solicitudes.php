@@ -62,16 +62,14 @@
                                         if ($_SESSION['user']['capital'] >= $solicitud['cantidad']) { ?>
                                             <button class="btn btn-success d-flex justify-content-between align-items-center mb-2" name="estado" value="Aceptada"><i class="fa fa-check me-2"></i>Aceptar</button>
                                         <?php } ?>
-                                        <button class="btn btn-danger d-flex justify-content-between align-items-center" name="estado" value="Rechazada"><i class="fa fa-trash me-2"></i>Rechazar</button>
+                                        <button class="btn btn-danger d-flex justify-content-between align-items-center" data-bs-toggle="modal" type="button" onclick="setConfirmRejectId(<?php echo $solicitud['id_prestamo'] ?>)" data-bs-target="#confirmRechazar"><i class="fa fa-trash me-2"></i>Rechazar</button>
                                     <?php } ?>
                                     <?php if ($solicitud['estado'] === "Aceptada") { ?>
-                                        <button class="btn btn-danger d-flex justify-content-between align-items-center mb-2" name="estado" value="Rechazada">Retirar<i class="fa fa-trash"></i></button>
+                                        <button class="btn btn-danger d-flex justify-content-between align-items-center mb-2" data-bs-toggle="modal" type="button" onclick="setConfirmRejectId(<?php echo $solicitud['id_prestamo'] ?>)" data-bs-target="#confirmRechazar">Retirar<i class="fa fa-trash"></i></button>
                                         <button class="btn btn-success d-flex justify-content-between align-items-center mb-2" name="estado" type="button" onclick="abrirModalAbono(<?php echo $solicitud['id_prestamo'] ?>)">Abonar<i class="fa fa-money"></i></button>
-                                        <button class="btn btn-info d-flex justify-content-between align-items-center mb-2" name="estado" value="Rechazada">Completar<i class="fa fa-check"></i></button>
+                                        <button class="btn btn-info d-flex justify-content-between align-items-center mb-2" type="button" onclick="setConfirmCompleteId(<?php echo $solicitud['id_prestamo'] ?>)" data-bs-toggle="modal" data-bs-target="#confirmCompletar">Completar<i class="fa fa-check"></i></button>
                                     <?php } ?>
                                 </form>
-
-
                             <?php } ?>
                         </td>
                     </tr>
@@ -90,4 +88,5 @@
         </tbody>
     </table>
 </main>
+
 <?php include 'app/componentes/modals.php' ?>
