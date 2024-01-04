@@ -1,27 +1,77 @@
+<?php
+$fecha = $reporte ? new DateTime($reporte["create_time"]) : new DateTime();
+$time = new DateTime();
+$meses = [
+    "01" => "Enero",
+    "02" => "Febrero",
+    "03" => "Marzo",
+    "04" => "Abril",
+    "05" => "Mayo",
+    "06" => "Junio",
+    "07" => "Julio",
+    "08" => "Agosto",
+    "09" => "Septiembre",
+    "10" => "Octubre",
+    "11" => "Noviembre",
+    "12" => "Diciembre"
+]
+?>
 <main>
     <h3 class="vista-titulo">Reporte del mes</h3>
     <div class="row">
         <div class="card col-9 p-0">
-            <div class="card-header">
-                <div>Mes - Año</div>
-            </div>
-            <div class="card-body">
-                <span class="fs-3">Nombre Pagodiario</span>
-                <div>Prestamos Solicitados: </div>
-                <div>Aceptados: </div>
-                <div>Rechazados: </div>
-                <div>Completados: </div>
-                <div>Total prestada en el Mes: </div>
-                <div>Balance del mes: </div>
-            </div>
-            <div class="card-footer text-end"><button class="btn btn-primary"><i class="fa fa-download"></i></button></div>
+            <?php if ($reporte) { ?>
+                <div class="card-header">
+                    <div class="fs-2"> <?php echo $fecha->format("Y") ?> - <?php echo $fecha->format("m") ?></div>
+                </div>
+                <div class="card-body">
+                    <span class="fs-3"><?php echo $reporte["pagodiario"] ?></span>
+                    <div>Prestamos Solicitados: <?php echo $reporte["solicitudes"] ?></div>
+                    <div>Aceptados: <?php echo $reporte["aceptados"] ?></div>
+                    <div>Rechazados: <?php echo $reporte["rechazados"] ?></div>
+                    <div>Completados: <?php echo $reporte["completados"] ?></div>
+                    <div>Total prestada en el Mes: <?php echo $reporte["total"] ?></div>
+                    <div>Balance del mes: <?php echo $reporte["balance"] ?></div>
+                </div>
+                <div class="card-footer text-end"><button class="btn btn-primary"><i class="fa fa-download"></i></button></div>
+            <?php } else { ?>
+                <div class="position-absolute top-50 start-50 translate-middle">
+                    <?php NoRegistrosComponent() ?>
+                </div>
+            <?php } ?>
         </div>
         <ul class="card col-3 p-0 list-group">
-            <div class="card-header">Historial</div>
-            <li class="fs-4 list-group-item">Año</li>
-            <?php ?>
-            <li class="list-group-item list-group-item-action">Mes</li>
-            <?php ?>
+            <form action="" method="GET">
+                <div class="card-header">Historial</div>
+                <ul class="list-group-horizontal list-group fs-4 row mx-0">
+                    <li class="
+                        list-group-item 
+                         col-6">
+                        <input <?php if ((isset($_GET["date_year"]) && $_GET["date_year"] == $fecha->format("Y") - 1)) echo "checked" ?> type="radio" id="lastYear" name="date_year" value="<?php echo $fecha->format("Y") - 1 ?>" class="
+                        form-check-input me-1">
+                        <label class="form-check-label" for="lastYear">
+                            <?php echo $fecha->format("Y") - 1 ?>
+                        </label>
+                    </li>
+                    <li class="
+                        list-group-item 
+                        col-6">
+                        <input <?php if ((isset($_GET["date_year"]) && $fecha->format("Y") == $_GET["date_year"]) || !isset($_GET["date_year"])) echo "checked" ?> type="radio" id="currYear" name="date_year" value="<?php echo $fecha->format("Y") ?>" class="
+                        form-check-input me-1">
+                        <label class="form-check-label" for="currYear">
+                            <?php echo $fecha->format("Y") ?>
+                        </label>
+                    </li>
+                </ul>
+                <?php foreach ($meses as $key => $mes) { ?>
+                    <button class="
+                        list-group-item 
+                        <?php if ((isset($_GET["date_month"]) && $key == $_GET["date_month"]) || (!isset($_GET["date_month"]) && $fecha->format("m") == $key)) echo 'active' ?> 
+                        list-group-item-action" name="date_month" value="<?php echo $key ?>">
+                        <?php echo $mes ?>
+                    </button>
+                <?php } ?>
+            </form>
         </ul>
     </div>
 </main>

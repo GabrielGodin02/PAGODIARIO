@@ -42,4 +42,26 @@ class UsersController extends Controller
             showResult($update_query, showSuccess: true);
         }
     }
+    public function readReporte() {
+        $time = new DateTime();
+        $mes = isset($_GET["date_month"]) ? $_GET["date_month"] : $time->format('m');
+        $anio = isset($_GET["date_year"]) ? $_GET["date_year"] : $time->format('Y');
+        $fecha = "$anio-$mes";
+        $pagodiario = $_SESSION["user"]["ident"];
+    
+        $query = "SELECT *, 
+        (SELECT CONCAT(nombre,' ',apellidos) FROM registro WHERE ident = reportes.id_pagodiario) as pagodiario 
+        FROM reportes, registro 
+        WHERE id_pagodiario = ? 
+        AND DATE_FORMAT(create_time, '%Y-%m') = ?";
+        
+        $resultado = false;
+        
+        if ($_SESSION["user"]["admin"]) {
+            $resultado = hacerConsulta($query, [$pagodiario, $fecha]);
+        }
+    
+        return mysqli_fetch_assoc($resultado);
+    }
+    
 }

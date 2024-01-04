@@ -38,8 +38,9 @@ class PrestamosController extends Controller
         $prestamos = $this->readPrestamosUser();
         include 'app/vistas/auth/deudor/solicitudes-deudor.php';
     }
-    public function showReporte()
+    public function showReporte($user)
     {
+        $reporte = $user->readReporte();
         include 'app/vistas/auth/admin/reporte.php';
     }
     public function readCobrosDelDia()
