@@ -1,6 +1,10 @@
 <?php
+require __DIR__ . '/vendor/autoload.php';
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+// variables de entorno
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 // extraccion de url
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 session_start(); // inicio de sesion

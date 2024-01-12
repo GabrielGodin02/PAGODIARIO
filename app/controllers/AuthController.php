@@ -1,6 +1,10 @@
 <?php
 require "app/models/Controller.php";
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
+
 class AuthController extends Controller
 {
     public $helpers;
@@ -36,6 +40,7 @@ class AuthController extends Controller
     }
     public function showRecoveryForm()
     {
+        $this->sendUserPasswordCode();
         include 'app/vistas/recuperar-contrasenia.php';
     }
     public function showUpdatePasswordForm()
@@ -94,7 +99,7 @@ class AuthController extends Controller
             ]);
             // devolver reultados
             if ($ejecucion) header('location: /');
-            showResult(($ejecucion));
+            showResult($ejecucion, true, true);
             // Redirecciona a la página de inicio de sesión u otra página
             //exit();
         }
@@ -127,6 +132,113 @@ class AuthController extends Controller
             }
 
             showResult($update_query, showSuccess: true);
+        }
+    }
+    public function sendUserPasswordCode()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $ident =  $_POST['ident'];
+            $getEmail = mysqli_fetch_array(hacerConsulta("SELECT email, nombre, apellidos FROM registro WHERE ident = ?", [$ident]));
+            $email = $getEmail["email"];
+            $error_message = "Usuario no encontrado";
+
+            if ($email != null) {
+                require 'vendor/autoload.php';
+                $token = md5($email);
+                $expiry_time = mktime(date("H", time() + 10), date("i"), date("s"), date("m"), date("d"), date("Y"));
+                $expiry_date = date("Y-m-d H:i:s", $expiry_time);
+                $query = "UPDATE registro set reset_token=?, expiry_date=? WHERE email=?";
+                $usuario = $getEmail["nombre"] . " " . $getEmail["apellidos"];
+                $domain = $_ENV['APP_DOMAIN'];
+                $result = hacerConsulta($query, [$token, $expiry_date, $email]);
+
+                $parrafo1 = "
+                    <p>
+                        Hola <b>$usuario</b>, se solicito la recupercion de contraseña para tu cuenta de <b>pagodiario.online</b>. 
+                    </p>
+                ";
+                $parrafo2 = "
+                    <p>
+                        Si no fuiste tu, ignora este mensaje.
+                    </p>
+                ";
+                $link = "
+                    <a 
+                        href='$domain/reset-password.php?email=$email%&token=$token'
+                        style=
+                        '
+                        background-color: blue;
+                        color: white;
+                        border-radius: 10px;
+                        padding: 10px;
+                        text-decoration: none;
+                        '
+                        class='' 
+                    >
+                        Presiona aqui para recuperar tu contraseña
+                    </a>
+                ";
+                $mensaje = "
+                    <main>
+                        <h2>Recuperación de contraseña</h2>
+                        $parrafo1
+                        $link
+                        $parrafo2
+                    </main>
+                ";
+
+                //Email send code
+                $to_email = $email;
+                $mail_subject = "Recuperar contraseña";
+                $mail_content = $mensaje;
+
+                // Always set content-type when sending HTML email
+                $headers = "MIME-Version: 1.0" . "\r\n";
+                $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+                // More headers
+                $headers .= "From: no-reply@test.com" . "\r\n";
+
+                //Create an instance; passing `true` enables exceptions
+                $mail = new PHPMailer(true);
+
+                try {
+                    //Server settings
+                    $mail->isSMTP();
+                    $mail->Host = 'sandbox.smtp.mailtrap.io';
+                    $mail->SMTPAuth = true;
+                    $mail->Port = 2525;
+                    $mail->Username = $_ENV['MAILTRAP_ID'];
+                    $mail->Password = $_ENV['MAILTRAP_PW'];        // Set the SMTP server to send through
+
+                    //Recipients
+                    $mail->setFrom('codelivejunior@gmail.com', 'Pagodiario.online');
+                    $mail->addAddress($to_email);     //Add a recipient
+
+                    //Content
+                    $mail->isHTML(true);                                  //Set email format to HTML
+                    $mail->Subject = $mail_subject;
+                    $mail->Body    = $mail_content;
+                    $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+                    $mail->send();
+                } catch (Exception $e) {
+                    $error_message = "No se pudo enviar el mensaje";
+                    $email = false;
+                }
+            }
+            showResult($email ?? false, true, true, "Revisa tu direccion de correo electronico", $error_message);
+        }
+    }
+    public function checkUserPasswordCode()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $code =  $_POST["code"];
+        }
+    }
+    public function recoverUserPassword()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $ident =  $_SESSION['user']['ident'];
         }
     }
     public function logoutUser()

@@ -28,4 +28,5 @@ function hacerConsulta($sql, $params = [])
     } else echo "Error en la preparación de la consulta: " . $conexion->error;
     
     return $result;
+    /*realizar una consulta my_sqli protegida    */
 }
