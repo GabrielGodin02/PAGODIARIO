@@ -48,6 +48,11 @@ class AuthController extends Controller
         $this->updateUserPassword();
         include 'app/vistas/auth/update-password.php';
     }
+    public function showResetPasswordForm()
+    {
+        $this->recoverUserPassword();
+        include 'app/vistas/reset-password.php';
+    }
     public function loginUser()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -104,11 +109,6 @@ class AuthController extends Controller
             //exit();
         }
     }
-    public function recoverUser()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        }
-    }
     public function updateUserPassword()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -145,8 +145,9 @@ class AuthController extends Controller
             if ($email != null) {
                 require 'vendor/autoload.php';
                 $token = md5($email);
-                $expiry_time = mktime(date("H", time() + 10), date("i"), date("s"), date("m"), date("d"), date("Y"));
-                $expiry_date = date("Y-m-d H:i:s", $expiry_time);
+                $current_time = time(); // Obtener la fecha y hora actuales
+                $expiry_time = $current_time + (15 * 60); // Sumar 15 minutos (60 segundos por minuto * 15 minutos)
+                $expiry_date = date("Y-m-d H:i:s", $expiry_time); // Formatear la nueva fecha y hora
                 $query = "UPDATE registro set reset_token=?, expiry_date=? WHERE email=?";
                 $usuario = $getEmail["nombre"] . " " . $getEmail["apellidos"];
                 $domain = $_ENV['APP_DOMAIN'];
@@ -164,7 +165,7 @@ class AuthController extends Controller
                 ";
                 $link = "
                     <a 
-                        href='$domain/reset-password.php?email=$email%&token=$token'
+                        href ='http://$domain/reset-password?email=" . urlencode($email) . "&token=" . urlencode($token) . "'
                         style=
                         '
                         background-color: blue;
@@ -229,16 +230,34 @@ class AuthController extends Controller
             showResult($email ?? false, true, true, "Revisa tu direccion de correo electronico", $error_message);
         }
     }
-    public function checkUserPasswordCode()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $code =  $_POST["code"];
-        }
-    }
     public function recoverUserPassword()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $ident =  $_SESSION['user']['ident'];
+            $email =  $_GET['email'];
+            $token =  $_GET['token'];
+            $new_password = $_POST['new'];
+            $cnew_password = $_POST['confirm_new'];
+            $update_query = false;
+
+            $errorMessage = "Las contraseñas no coinciden";
+            if ($new_password == $cnew_password = $_POST['confirm_new']) {
+                $checkUser = hacerConsulta('SELECT * FROM registro WHERE email = ? AND reset_token = ?', [$email, $token]);
+                $current_date = date("Y-m-d H:i:s");
+                $expiry_date = mysqli_fetch_array($checkUser)['expiry_date'];
+
+                $errorMessage = "Token expirado";
+                if (mysqli_num_rows($checkUser) > 0 && $current_date <= $expiry_date) {
+                    $update_sql =
+                        "UPDATE registro 
+                        SET password=PASSWORD(?), expiry_date = NULL, reset_token = NULL
+                        WHERE email=(?)
+                        AND reset_token = ?";
+
+                    $update_query = hacerConsulta($update_sql, [$new_password, $email, $token]);
+                }
+            }
+
+            showResult($update_query, showSuccess: true, errorMessage: $errorMessage);
         }
     }
     public function logoutUser()

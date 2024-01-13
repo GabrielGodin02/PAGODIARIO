@@ -18,7 +18,7 @@
                   <div class="form-group">
                     <div class="input-group">
                       <span class="input-group-addon"><i class="fa fa-envelope color-blue"></i></span>
-                      <input id="email" name="ident" placeholder="id usuario" class="form-control" type="number">
+                      <input id="email" name="ident" placeholder="Numero de documento" class="form-control" min="1" type="number">
                     </div>
                   </div>
                   <div class="form-group">

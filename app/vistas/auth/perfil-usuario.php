@@ -59,11 +59,11 @@
             </div>
             <div class="row mt-2 px-3">
                 <div class="col">
-                    <button class="btn btn-primary activate" type="button" onclick="switchEditMode()">Editar</button>
+                    <button class="btn btn-primary switch activate" type="button" onclick="switchEditMode()">Editar</button>
                 </div>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <button class="btn btn-secondary hidden  me-md-2" type="reset" onclick="switchEditMode()">Cancelar</button>
-                    <button class="btn btn-primary hidden" type="submit" name="save" value="save">Guardar</button>
+                    <button class="btn btn-secondary hidden switch me-md-2" type="reset" onclick="switchEditMode()">Cancelar</button>
+                    <button class="btn btn-primary hidden switch" type="submit" name="save" value="save">Guardar</button>
                 </div>
             </div>
             </form>
@@ -71,17 +71,28 @@
         <?php if ($_SESSION["user"]["admin"]) { ?>
             <div class="card p-3 col-sm-6">
                 <div class="row">
-                    <span class="fs-4 fw-200 col-auto"><i class="fa fa-money"></i> Mi Capital : </span>
-                    <span class="fs-4 align-middle text-secondary fc-secondary col-auto">$<?php echo $_SESSION['user']['capital'] ?></span>
+                    <span class="fs-4 fw-200 col-auto input-text"><i class="fa fa-money"></i> Mi Capital : </span>
+                    <form action="" id="capital-edit-form" method="post" class="input-group">
+                        <span class="input-group-text fs-3" id="addon1">$</span>
+                        <input class="fs-4 align-middle text-secondary form-control fc-secondary col-auto" name="capital" value="<?php echo $_SESSION['user']['capital'] ?>" disabled>
+                        <button type="button" class="input-group-text btn switch2 btn-primary" id="addon2" onclick="switchEditMode2()"><i class="fa fa-edit"></i></button>
+                        <button type="reset" class="input-group-text btn switch2 hidden btn-secondary" id="addon3" onclick="switchEditMode2()"><i class="fa fa-rotate-right"></i></button>
+                        <button type="submit" class="input-group-text btn switch2 hidden btn-success" id="addon4"><i class="fa fa-check"></i></button>
+                    </form>
                     <?php if ($_SESSION["user"]["admin"] && $_SESSION["user"]["capital"] < 10000) { ?>
                         <span class="text-danger col-auto align-middle">Con tu capital actual no puedes realizar prestamos</span>
                     <?php } ?>
                 </div>
             </div>
         <?php } ?>
-        <a href="cambiar-contrasenia" class="fs-4 p-3 col-sm-<?php echo $_SESSION["user"]["admin"] ? 6 : 12 ?> btn btn-danger">
-            <i class="fa fa-lock"></i> Cambiar Contraseña
-        </a>
+        <div class="col-sm-<?php echo $_SESSION["user"]["admin"] ? 6 : 12 ?> p-0">
+            <a href="cambiar-contrasenia" class="fs-4 p-3 col-sm-12 btn btn-danger">
+                <i class="fa fa-lock"></i> Cambiar Contraseña
+            </a>
+            <a href="/recuperacion" class="fs-4 p-3 col-sm-12 btn btn-warning">
+                <i class="fa fa-warning"></i> Olvide mi Contraseña
+            </a>
+        </div>
     </div>
 
 </main>
@@ -90,7 +101,15 @@
     const switchEditMode = () => {
         editMode = !editMode;
         document.querySelector('#user-edit-form').querySelectorAll(".form-control").forEach((input) => input.disabled = !editMode);
-        document.querySelectorAll("button").forEach((button) => {
+        document.querySelectorAll(".switch").forEach((button) => {
+            button.classList.contains("hidden") ? button.classList.remove("hidden") : button.classList.add("hidden")
+        })
+    };
+    let editMode2 = false;
+    const switchEditMode2 = () => {
+        editMode2 = !editMode2;
+        document.querySelector('#capital-edit-form').querySelectorAll(".form-control").forEach((input) => input.disabled = !editMode2);
+        document.querySelectorAll(".switch2").forEach((button) => {
             button.classList.contains("hidden") ? button.classList.remove("hidden") : button.classList.add("hidden")
         })
     };

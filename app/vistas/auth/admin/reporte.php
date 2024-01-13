@@ -24,14 +24,16 @@ $meses = [
                 <div class="card-header">
                     <div class="fs-2"> <?php echo $fecha->format("Y") ?> - <?php echo $fecha->format("m") ?></div>
                 </div>
-                <div class="card-body">
+                <div class="card-body fs-4">
                     <span class="fs-3"><?php echo $reporte["pagodiario"] ?></span>
                     <div>Prestamos Solicitados: <?php echo $reporte["solicitudes"] ?></div>
                     <div>Aceptados: <?php echo $reporte["aceptados"] ?></div>
                     <div>Rechazados: <?php echo $reporte["rechazados"] ?></div>
                     <div>Completados: <?php echo $reporte["completados"] ?></div>
                     <div>Total prestada en el Mes: <?php echo $reporte["total"] ?></div>
-                    <div>Balance del mes: <?php echo $reporte["balance"] ?></div>
+                    <div class="text-<?php echo ($reporte["balance"] > 0) ? 'success' : (($reporte["balance"] < 0) ? 'danger' : 'primary') ?>">
+                    Balance del mes: <?php echo (($reporte["balance"] > 0 ? '+' : '') . $reporte["balance"]) ?>
+                    </div>
                 </div>
                 <div class="card-footer text-end"><button class="btn btn-primary"><i class="fa fa-download"></i></button></div>
             <?php } else { ?>

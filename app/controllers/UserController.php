@@ -27,17 +27,27 @@ class UsersController extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $ident =  $_SESSION['user']['ident'];
-            $direccion = $_POST['direccion'];
-            $telefono = $_POST['telefono'];
-            $email = $_POST['email'];
-            $profesion = $_POST['profesion'];
-            $estado = $_POST['estado'];
-
-            $update_sql =
-                "UPDATE registro 
-                SET direccion = (?) , email = (?) , profesion = (?) , estado = (?) , telefono = (?)
-                WHERE ident = (?)";
-            $update_query = hacerConsulta($update_sql, [$direccion, $email, $profesion, $estado, $telefono, $ident]);
+            if (!isset($_POST['capital'])){
+                $direccion = $_POST['direccion'];
+                $telefono = $_POST['telefono'];
+                $email = $_POST['email'];
+                $profesion = $_POST['profesion'];
+                $estado = $_POST['estado'];
+    
+                $update_sql =
+                    "UPDATE registro 
+                    SET direccion = (?) , email = (?) , profesion = (?) , estado = (?) , telefono = (?)
+                    WHERE ident = (?)";
+                $update_query = hacerConsulta($update_sql, [$direccion, $email, $profesion, $estado, $telefono, $ident]);
+            }else{
+                $capital = $_POST['capital'];
+    
+                $update_sql =
+                    "UPDATE registro 
+                    SET capital = (?)
+                    WHERE ident = (?)";
+                $update_query = hacerConsulta($update_sql, [$capital, $ident]);
+            }
 
             showResult($update_query, showSuccess: true);
         }

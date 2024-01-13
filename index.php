@@ -2,6 +2,8 @@
 require __DIR__ . '/vendor/autoload.php';
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+// Establecer la zona horaria a la hora local
+date_default_timezone_set('America/Bogota');  // Cambia 'America/Bogota' según tu ubicación
 // variables de entorno
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
@@ -37,6 +39,7 @@ switch ($uri) { // Router/body de la app
     case '/login': $auth->showLoginForm(); break;
     case '/registro': $auth->showRegisterForm(); break;
     case '/recuperacion': $auth->showRecoveryForm(); break;
+    case '/reset-password': $auth->showResetPasswordForm(); break;
     case '/deudor': $soli->showPrestamoForm(); break;
     case '/deudor/mi-perfil':$user->showUpdateUserForm(); break;
     case '/deudor/cambiar-contrasenia': $auth->showUpdatePasswordForm(); break;
