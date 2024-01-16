@@ -85,7 +85,7 @@
                 </div>
             </div>
         <?php } ?>
-        <div class="col-sm-<?php echo $_SESSION["user"]["admin"] ? 6 : 12 ?> p-0">
+        <div class="d-grid col-sm-<?php echo $_SESSION["user"]["admin"] ? 6 : 12 ?> p-0">
             <a href="cambiar-contrasenia" class="fs-4 p-3 col-sm-12 btn btn-danger">
                 <i class="fa fa-lock"></i> Cambiar Contraseña
             </a>
