@@ -51,9 +51,9 @@
         if (!isNaN(cantida_prestamo) && cantida_prestamo >= 10000 && cantida_prestamo <= 100000000) {
             const tasaInteres = 0.20;
             const montoConInteres = cantida_prestamo * (1 + tasaInteres);
-            const pagoDiario = montoConInteres * 0.04;
+            const pagoDiario = montoConInteres * 0.2;
 
-            resultParagraph.innerHTML = `Con una tasa de interés del 20%,vas a estar pagando $${pagoDiario.toFixed(2)}<br> por día.Monto total a pagar: $${montoConInteres.toFixed(2)}.`;
+            resultParagraph.innerHTML = `Con una tasa de interés del 20%,vas a estar pagando $${pagoDiario.toFixed(2)}<br> por día. Monto total a pagar: $${montoConInteres.toFixed(2)}.`;
             resultado.value = pagoDiario.toFixed(2);
         } else {
             resultParagraph.textContent = 'Ingrese una cantidad válida entre 10,000 o Superior';

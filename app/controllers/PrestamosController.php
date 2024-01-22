@@ -122,11 +122,11 @@ class PrestamosController extends Controller
     }
     public function updatePrestamoStatus($prestamo = false, $status = false)
     {
+        $result = false;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $id_prestamo = is_string($prestamo) ? $prestamo : $_POST['id_prestamo'];
             $estado =  is_string($status) ? $status : $_POST['estado'];
-            $result = false;
             $err_msg = "Estado Invalido " . $estado;
             if ($estado === 'Aceptada' || $estado === 'Rechazada' || $estado === 'Completado') {
                 $query_solicitud = "SELECT * FROM prestamo WHERE id_prestamo = ?";
@@ -141,13 +141,13 @@ class PrestamosController extends Controller
                     $err_msg = "No se pudo hacer el cambio";
                 }
             }
+            showResult(
+                $result,
+                showSuccess: true,
+                successMessage: "Solicitud $estado",
+                errorMessage: $err_msg
+            );
         }
-        showResult(
-            $result,
-            showSuccess: true,
-            successMessage: "Solicitud $estado",
-            errorMessage: $err_msg
-        );
 ?>
    
 

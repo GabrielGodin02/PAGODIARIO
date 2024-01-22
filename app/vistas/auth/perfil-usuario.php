@@ -74,7 +74,7 @@
                     <span class="fs-4 fw-200 col-auto input-text"><i class="fa fa-money"></i> Mi Capital : </span>
                     <form action="" id="capital-edit-form" method="post" class="input-group">
                         <span class="input-group-text fs-3" id="addon1">$</span>
-                        <input class="fs-4 align-middle text-secondary form-control fc-secondary col-auto" name="capital" value="<?php echo $_SESSION['user']['capital'] ?>" disabled>
+                        <input type="number" min="0" class="fs-4 align-middle text-secondary form-control fc-secondary col-auto" name="capital" value="<?php echo $_SESSION['user']['capital'] ?>" disabled>
                         <button type="button" class="input-group-text btn switch2 btn-primary" id="addon2" onclick="switchEditMode2()"><i class="fa fa-edit"></i></button>
                         <button type="reset" class="input-group-text btn switch2 hidden btn-secondary" id="addon3" onclick="switchEditMode2()"><i class="fa fa-rotate-right"></i></button>
                         <button type="submit" class="input-group-text btn switch2 hidden btn-success" id="addon4"><i class="fa fa-check"></i></button>

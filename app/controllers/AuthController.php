@@ -63,7 +63,7 @@ class AuthController extends Controller
             $resultado = hacerConsulta($consulta, [$passw, $email]);
             $fila = mysqli_num_rows($resultado);
 
-            showResult($fila);
+            showResult($fila, showSuccess: false);
             if ($fila) {
                 // Autenticación exitosa, guarda la identificación en una variable de sesión
                 $_SESSION['user'] = mysqli_fetch_array($resultado);
@@ -72,8 +72,8 @@ class AuthController extends Controller
                 $this->saveToken();
 
                 if (isset($_SESSION['token'])) {
-                    if ($_SESSION['admin']) header("location: /admin");
-                    else header("location: /deudor");
+                    if ($_SESSION['admin']) redirect("/admin");
+                    else redirect("/deudor");
                 } else $this->logoutUser();
             }
             //mysqli_free_result($resultado);
@@ -94,17 +94,23 @@ class AuthController extends Controller
             $profesion = $_POST['profesion'];
             $fecha = $_POST['fecha'];
 
-            // Guarda los datos en la base de datos (deberías usar sentencias preparadas)";
-            $query = "INSERT INTO registro (nombre, apellidos, direccion, telefono, ident, email, password, estado, profesion, fecha) 
-            VALUES (?, ?, ?, ?, ?, ?, PASSWORD(?), ?, ?, ?)";
+            $check_query = "SELECT 1 FROM registro WHERE ident = ?";
+            $ejecucion = hacerConsulta($check_query, [$ident]);
+            $error_message = "Usuario ya existente";
+            if (mysqli_num_rows($ejecucion) <= 0) {
+                // Guarda los datos en la base de datos (deberías usar sentencias preparadas)";
+                $query = "INSERT INTO registro (nombre, apellidos, direccion, telefono, ident, email, password, estado, profesion, fecha) 
+                VALUES (?, ?, ?, ?, ?, ?, PASSWORD(?), ?, ?, ?)";
 
-            // Ejecuta la consulta (deberías manejar errores y excepciones aquí)
-            $ejecucion = hacerConsulta($query, [
-                $nombre, $apellidos, $direccion, $telefono, $ident, $email, $passw, $estado, $profesion, $fecha
-            ]);
-            // devolver reultados
-            if ($ejecucion) header('location: /');
-            showResult($ejecucion, true, true);
+                // Ejecuta la consulta (deberías manejar errores y excepciones aquí)
+                $ejecucion = hacerConsulta($query, [
+                    $nombre, $apellidos, $direccion, $telefono, $ident, $email, $passw, $estado, $profesion, $fecha
+                ]);
+                // devolver reultados
+                if ($ejecucion) redirect('/');
+                $error_message = "No se pudo hacer el registro, intentelo más tarde.";
+            } else $ejecucion = false;
+            showResult($ejecucion, true, true, errorMessage: $error_message);
             // Redirecciona a la página de inicio de sesión u otra página
             //exit();
         }
@@ -144,7 +150,7 @@ class AuthController extends Controller
 
             if ($email != null) {
                 require 'vendor/autoload.php';
-                $token = md5($email);
+                $token = $this->generateToken();
                 $current_time = time(); // Obtener la fecha y hora actuales
                 $expiry_time = $current_time + (15 * 60); // Sumar 15 minutos (60 segundos por minuto * 15 minutos)
                 $expiry_date = date("Y-m-d H:i:s", $expiry_time); // Formatear la nueva fecha y hora
@@ -266,7 +272,7 @@ class AuthController extends Controller
         $query = "DELETE FROM inicio_sesion WHERE token = ?";
         hacerConsulta($query, [$token]);
         session_destroy();
-        header('location: /');
+        redirect('/');
         die();
     }
 }

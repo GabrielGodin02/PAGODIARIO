@@ -27,6 +27,7 @@ class UsersController extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $ident =  $_SESSION['user']['ident'];
+            $update_query = false;
             if (!isset($_POST['capital'])){
                 $direccion = $_POST['direccion'];
                 $telefono = $_POST['telefono'];
@@ -40,13 +41,14 @@ class UsersController extends Controller
                     WHERE ident = (?)";
                 $update_query = hacerConsulta($update_sql, [$direccion, $email, $profesion, $estado, $telefono, $ident]);
             }else{
-                $capital = $_POST['capital'];
-    
-                $update_sql =
-                    "UPDATE registro 
-                    SET capital = (?)
-                    WHERE ident = (?)";
-                $update_query = hacerConsulta($update_sql, [$capital, $ident]);
+                if (is_numeric($_POST['capital']) && $_POST['capital'] >= 0) {
+                    $capital = $_POST['capital'];
+                    $update_sql =
+                        "UPDATE registro 
+                        SET capital = (?)
+                        WHERE ident = (?)";
+                    $update_query = hacerConsulta($update_sql, [$capital, $ident]);
+                }
             }
 
             showResult($update_query, showSuccess: true);

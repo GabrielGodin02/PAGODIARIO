@@ -19,7 +19,7 @@ $meses = [
 <main>
     <h3 class="vista-titulo">Reporte del mes</h3>
     <div class="row">
-        <div class="card col-9 p-0">
+        <div class="card justify-content-center col-sm-12 col-md-9 p-0">
             <?php if ($reporte) { ?>
                 <div class="card-header">
                     <div class="fs-2"> <?php echo $fecha->format("Y") ?> - <?php echo $fecha->format("m") ?></div>
@@ -37,12 +37,10 @@ $meses = [
                 </div>
                 <div class="card-footer text-end"><button class="btn btn-primary"><i class="fa fa-download"></i></button></div>
             <?php } else { ?>
-                <div class="position-absolute top-50 start-50 translate-middle">
                     <?php NoRegistrosComponent() ?>
-                </div>
             <?php } ?>
         </div>
-        <ul class="card col-3 p-0 list-group">
+        <ul class="card col-sm-12 col-md-3 p-0 list-group">
             <form action="" method="GET">
                 <div class="card-header">Historial</div>
                 <ul class="list-group-horizontal list-group fs-4 row mx-0">
