@@ -1,163 +1,74 @@
 <?php
-    include 'php/conexion.php';
-    $sql = "SELECT id_usuario, nombre, email, direccion, telefono,dia_solicitado, hora, cantida_prestamo  FROM registro, prestamo WHERE id_usuario=ident";
-    $query = mysqli_query($conexion,$sql);
-    $row = mysqli_fetch_array($query);
+require __DIR__ . '/vendor/autoload.php';
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+// Establecer la zona horaria a la hora local
+date_default_timezone_set('America/Bogota');  // Cambia 'America/Bogota' según tu ubicación
+// variables de entorno
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+// extraccion de url
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+session_start(); // inicio de sesion
+// controladores - configuracion - helpers - componentes - base de datos
+require 'includes/utils/conexion.php';
+require 'app/config/index.php';
+require 'app/helpers/index.php';
+require 'app/controllers/index.php';
+require 'app/componentes/index.php';
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    <script src="java.js"></script>
-    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="/public/css/index.css">
+    <title>pagodiarios - pide tu prestamo hoy</title>
 </head>
-<body>
-    <header>
-        <nav>
-            <div class="container">
-                <div class="logo" onclick="toggleList()"><img src="img/usuario.png"></div>
-                <ul class="lista">
-                    <li><a href="">Aceptadas</a></li>
-                    <li><a href="solicitudes_usuario.php">Rechazadas</a></li>
-                    <li><a href="login.php"> Log Out</a></li>
-                </ul>
-            </div>
-        </nav>
-        
-    </header>
-    <main class="main">
-        <table class="table table-striped" >
-            <thead>
-                <tr>
-                    <th scope="col">Identificacion</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">direccion</th>
-                    <th scope="col">Telefono</th>
-                    <th scope="col">Dia de prestamo</th>
-                    <th scope="col">Hora</th>
-                    <th scope="col">Monto a Solicitar</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-           
-            <tbody>
-        <?php 
-         if($row !=null){
-            do{
-        ?>
-            <tr>
-                <td><?php echo $row ['id_usuario']?></td>
-                <td><?php echo $row ['nombre']?></td>
-                <td><?php echo $row ['email']?></td>
-                <td><?php echo $row ['direccion']?></td>
-                <td><?php echo $row ['telefono']?></td>
-                <td><?php echo $row ['dia_solicitado']?></td>
-                <td><?php echo $row ['hora']?></td>
-                <td><?php echo $row ['cantida_prestamo']?></td>
-                <td><a href="javascript:void(0);" class="botona" onclick="abrirModal('<?php echo $row['id_usuario']; ?>')">Abonar</a></td>
-                <td><a href="php/borrar.php?id=<?php echo $row ['id_usuario']?>" class="botona">Borrar</a></td>
-                <td>
-                    <form action='php/guardar_seleccion.php' method='POST' class="sele">
-                        <input type="hidden" name="id_usuario" value="<?php echo $row['id_usuario']; ?>">
-                        <select name="estado" id="opcion_<?php echo $row['id_usuario']; ?>" onchange="this.form.submit()">
-                            <option value="">----</option>
-                            <option value="Aceptada" required>Aceptada</option>
-                            <option value="Rechazada" required>Rechazada</option>
-                        </select>
-                    </form>
-                </td>
-                <script>
-                    function guardarSeleccion(usuarioId, seleccion) {
-                        // Realiza una solicitud AJAX para enviar la selección al servidor
-                        var xhr = new XMLHttpRequest();
-                        xhr.open('POST', 'php/guardar_seleccion.php', true);
-                        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                        xhr.onreadystatechange = function () {
-                            if (xhr.readyState === 4 && xhr.status === 200) {
-                                var respuesta = xhr.responseText;
-                                var mensajeElement = document.getElementById("mensaje_" + usuarioId);
-
-                                if (respuesta === "ok") {
-                                    mensajeElement.textContent = "Selección guardada con éxito";
-                                } else {
-                                    mensajeElement.textContent = "Error al guardar la selección";
-                                }
-                            }
-                        };
-
-                        // Envía la selección al servidor
-                        xhr.send("usuario_id=" + usuarioId + "&seleccion=" + seleccion);
-                    }
-             </script>
-            </tr>
-           
-        <?php
-            }while($row=mysqli_fetch_array($query));
-
-         }
-        ?>
-        </tbody>
-
-        </table>
-        <div id="modalAbono" class="modal">
-            <div class="modal-contenido">
-                <span class="cerrar" id="cerrarModalAbono">&times;</span>
-                <h2>Realizar Abono</h2>
-                <!-- Aquí puedes agregar un formulario para realizar el abono -->
-                <form action="php/realizar_abono.php" method="POST">
-                    <div class="abonar">
-                        <label for="monto">Monto del abono:</label>
-                        <input type="number" id="monto" name="monto" required>
-                        <input type="hidden" id="usuario_id" name="usuario_id" value="">
-                        <button type="submit">Realizar Abono</button>
-                    </div>
-                   
-                </form>
-            </div>
-     </div>
-         <script>
-                const cantida_prestamoInput = document.getElementById('cantida_prestamo');
-
-                <?php
-                // Verificar si el usuario ya ha solicitado un préstamo y deshabilitar el campo si es el caso
-                if ($row['cantida_prestamo'] > 0) {
-                    echo 'cantida_prestamoInput.disabled = true;';
-                }
-                ?>
-
-                // Resto de tu código JavaScript
-                // ...
-         </script>
-        <script>
-            
-            
-            function abrirModal(usuarioId) {
-                var modal = document.getElementById("modalAbono");
-                var usuarioIdInput = document.getElementById("usuario_id");
-                usuarioIdInput.value = usuarioId;
-                modal.style.display = "block";
-            }
-
-            function cerrarModalAbono() {
-                var modal = document.getElementById("modalAbono");
-                modal.style.display = "none";
-            }
-
-            var cerrarModalAbonoButton = document.getElementById("cerrarModalAbono");
-            if (cerrarModalAbonoButton) {
-                cerrarModalAbonoButton.addEventListener("click", cerrarModalAbono);
-            }
-        </script>
-
-    </main>
-    
-</body>
+<?php
+$auth = new AuthController();
+$user = new UsersController();
+$soli = new PrestamosController();
+include_once('app/componentes/nav_bar.php'); // nav-bar
+switch ($uri) { // Router/body de la app 
+    case '/': $auth->showLoginForm(); break;
+    case '/login': $auth->showLoginForm(); break;
+    case '/registro': $auth->showRegisterForm(); break;
+    case '/recuperacion': $auth->showRecoveryForm(); break;
+    case '/reset-password': $auth->showResetPasswordForm(); break;
+    case '/deudor': $soli->showPrestamoForm(); break;
+    case '/deudor/mi-perfil':$user->showUpdateUserForm(); break;
+    case '/deudor/cambiar-contrasenia': $auth->showUpdatePasswordForm(); break;
+    case '/deudor/mis-solicitudes':$soli->showSolicitudesUser(); break;
+    case '/deudor/mis-solicitudes/delete': $soli->deletePrestamo(); break;
+    case '/admin':$soli->showCobrosDelDia(); break;
+    case '/admin/abonar': $soli->payPrestamo(); $soli->showCobrosDelDia(); break;
+    case '/admin/excusar': $soli->excusePrestamo(); $soli->showCobrosDelDia(); break;
+    case '/admin/mi-perfil': $user->showUpdateUserForm(); break;
+    case '/admin/cambiar-contrasenia': $auth->showUpdatePasswordForm(); break;
+    case '/admin/reporte': $soli->showReporte($user); break;
+    case '/admin/control-solicitudes': $soli->showSolicitudes($user); break;
+    case '/admin/control-solicitudes/update': $soli->updatePrestamoStatus(); $soli->showSolicitudes($user); break;
+    case '/admin/control-solicitudes/complete': $soli->completePrestamo(); $soli->showSolicitudes($user); break;
+    //case '/admin/control-solicitudes/abonar': $soli->payPrestamo(); $soli->showSolicitudes(); break;
+    case '/logout': $auth->logoutUser(); break;
+    default:
+        http_response_code(404);
+        include 'app/vistas/404.php';
+        break;
+}
+?>
 <footer class="fot">
-  <label class="text">Copyright © Todos los derechos reservados</label>
-</footer>   
+    <span class="text">Copyright © Todos los derechos reservados</span>
+</footer>
+<script src="/public/js/modals.js"></script>
+<script src="/public/js/java.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+
 </html>

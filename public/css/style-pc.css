@@ -1,0 +1,59 @@
+@media (min-width: 500px) {
+    header {
+        position: relative;
+    }
+    main {
+        padding-top: 0px;
+    }
+    .ordenar-inf{
+      display: flex;
+      align-items: center;
+    }
+    .container.active .lista {
+      display: inline-flex;
+    }
+    .lista {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      width: auto;
+      display: inline-flex;
+      align-content: center;
+      background-color: transparent;
+      border: none;
+      position: relative;
+      top: 0px;
+    }
+    .gg {
+      margin-left: 17px;
+    }
+    .lista li {
+      padding-inline: 10px;
+      color: white;
+    }
+    .lista li a, .lista li i {
+      color: white;
+    }
+    .lista li a:hover, .lista li i:hover, .lista li {
+      color: rgb(255, 221, 27);
+    }
+    nav .container {
+      flex-direction: row;
+      justify-content: space-between;
+      display: inline-flex;
+      width: 100%;
+    }
+    nav {
+      overflow-x: scroll;
+      margin: 0px;
+    }
+    .gg {
+      display: flex;
+    }
+    .logo {
+      display: none;
+    }
+    /*.form-floating>label {
+      top: 0px;
+    }*/
+  }

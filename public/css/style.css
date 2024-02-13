@@ -1,0 +1,264 @@
+html {
+  min-height: 100%;
+}
+body {
+  font-family: 'Overpass', sans-serif;
+  font-weight: normal;
+  font-size: 100%;
+  color: #1b262c;
+  margin: 0;
+  background-color: #e2e2e2;
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+h1 {
+  margin-left: 24px;
+}
+header {
+  background-color: rgb(0, 128, 156);
+  padding-inline: 13px;
+  height: 100px;
+  width: 100%;
+  position: fixed;
+  top: 0px;
+  z-index: 9;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+.boton_usuario {
+  margin-top: 35px;
+  margin-inline: 5px;
+  display: flex;
+  border: none;
+  background-color: rgb(50, 150, 238);
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+.boton_usuario.cancel {
+  background-color: #888;
+  color: #1b262c;
+}
+nav {
+  display: flex;
+  height: 100%;
+}
+main {
+  overflow: scroll;
+  padding: 20px;
+  padding-top: 100px;
+  min-height: calc(100vh - 70px);
+}
+
+footer {
+  position: fixed;
+  text-align: center;
+  background-color: rgb(0, 128, 156);
+  height: 30px;
+  bottom: 0px;
+  border-top: solid 2px rgb(50, 81, 100);
+  width: 100%;
+  z-index: 9;
+}
+
+nav .container {
+  display: inline-flex;
+}
+.botona {
+  color: rgb(0, 128, 156);
+}
+p.danger {
+  font-size: 12px;
+  color: red;
+}
+.acordion {
+  margin-top: 66px;
+  text-overflow: clip;
+}
+.ordenar-inf{
+  display: block;
+}
+.formulario {
+  margin-top: 60px;
+}
+.btn-outline-info {
+  margin-top: 60px;
+  margin-left: 35px;
+  width: 130px;
+}
+.hidden {
+  visibility: hidden;
+  display: none;
+  width: 0px;
+  height: 0px;
+  position: absolute;
+}
+
+.search-cell {
+  grid-template-columns: auto auto auto;
+  grid-template-rows: auto;
+  width: 100%;
+  padding: 0px;
+}
+.search-cell span {
+  border: solid 1px black;
+  background-color: rgb(192, 192, 192);
+  padding: 5px;
+}
+.search-cell img {
+  width: 15px;
+}
+
+.text {
+  text-align: center;
+  margin-top: 25px;
+  color: rgb(201, 207, 255);
+  font-size: 10px;
+}
+
+.vista-titulo {
+  margin-inline: 34px;
+  margin-top: 26px;
+  padding-bottom: 10px;
+  
+  border-bottom: solid 1px rgb(196, 196, 196);
+}
+.form-control:disabled{
+  color: #888;
+}
+.table-striped {
+  margin-top: 22px;
+}
+
+.btn-outline-success {
+  margin-top: 60px;
+  margin-left: 700px;
+  border-color: rgb(0, 128, 156);
+}
+
+.estado{
+  color: white;
+  background-color: #888;
+}
+.estado.pendiente {
+  background-color: #888;
+}
+.estado.rechazada {
+  background-color: rgb(172, 50, 50);
+}
+.estado.aceptada {
+  background-color: rgb(31, 142, 31);
+}
+.estado.completado {
+  background-color: rgb(26, 128, 187);
+}
+
+.logo {
+  font-size: 20px;
+  padding: 10px;
+  color: #fff;
+  cursor: pointer;
+  display: grid;
+  align-content: center;
+  justify-content: center;
+}
+
+.hero {
+  display: grid;
+  align-content: center;
+  color: white;
+  margin: 0px 0px 0px 20px;
+}
+
+.link {
+  color: rgb(16, 141, 224);
+}
+
+/* Estilo de la lista oculta */
+.lista {
+  position: absolute;
+  top: 80px; /* Coloca la lista debajo del logotipo */
+  left: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  list-style: none;
+  margin: 0;
+  width: 110px;
+  display: none;
+}
+
+/* Estilo de los elementos de la lista */
+.lista li {
+  padding: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.lista li i {
+  margin-right: 10px;
+}
+.lista .selected {
+  background-color: white;
+}
+.lista .selected a, .lista .selected i {
+  color: rgb(0, 128, 156);
+}
+/* Mostrar la lista al hacer clic en el logotipo */
+.container.active .lista {
+  z-index: 10;
+  display: block;
+}
+
+/* Estilo para el modal */
+.modal {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-contenido {
+  background-color: #fff;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  text-align: center;
+  min-width: 390px;
+}
+
+.modal-contenido form {
+  margin: 0px;
+}
+.modal-contenido form button {
+  max-width: 350px;
+}
+.cerrar {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.cerrar:hover {
+  color: black;
+}
+.abonar {
+  display: grid;
+  justify-content: center;
+}
+.sele {
+  margin: auto;
+}
+
+@import url(style-pc.css);
